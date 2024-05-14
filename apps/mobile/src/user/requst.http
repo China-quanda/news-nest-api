@@ -1,0 +1,29 @@
+### create a user
+POST http://127.0.0.1:3000/api/user
+Content-Type: application/json
+
+{
+    "username":"name",
+    "password":"2445damkd"
+}
+
+### add a user
+PATCH http://127.0.0.1:3000/api/user/4 HTTP/1.1
+content-type: application/json
+
+{
+    "username":"name1234",
+    "password":"2445damkd"
+}
+
+### get user all
+GET http://127.0.0.1:3000/api/user
+Content-Type: application/json
+
+### get user all
+GET http://127.0.0.1:3000/api/user/4
+Content-Type: application/json
+
+### delete user one
+DELETE  http://127.0.0.1:3000/api/user/8
+Content-Type: application/json

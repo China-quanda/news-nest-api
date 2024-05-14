@@ -1,0 +1,17 @@
+### 注册
+POST http://127.0.0.1:3000/api/auth/singUp
+Content-Type: application/json
+
+{
+    "username":"liquanda2",
+    "password":"2445damkd"
+}
+
+### 登陆
+POST http://127.0.0.1:3000/api/auth/singIn
+Content-Type: application/json
+
+{
+    "username":"liquanda2",
+    "password":"2445damkd"
+}

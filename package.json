@@ -1,5 +1,5 @@
 {
-  "name": "apps",
+  "name": "nest-apps",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -10,6 +10,8 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "dev:admin": "nest start admin --watch",
+    "dev:mobile": "nest start mobile --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/apps/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

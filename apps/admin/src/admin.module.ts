@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { AuthModule } from '@app/common';
+import { AuthModule, ConfigModule } from '@app/common'; //CommonModule
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, ConfigModule], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],
 })

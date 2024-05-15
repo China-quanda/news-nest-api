@@ -5,6 +5,7 @@ import { MobileModule } from './mobile.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(MobileModule);
+  app.setGlobalPrefix('/api');
   app.useStaticAssets('public', { prefix: '/public' });
   // app.setBaseViewsDir(join(__dirname, '../', 'views'));
   app.setBaseViewsDir('views');

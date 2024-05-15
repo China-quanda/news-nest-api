@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 import { MobileService } from './mobile.service';
 import { ConfigService } from '@nestjs/config';
 @Controller()
@@ -9,8 +9,10 @@ export class MobileController {
   ) {}
 
   @Get()
-  getHello(): string {
+  @Render('welcome')
+  getHello() {
     console.log('jwt-m', this.configService.get('jwt'));
-    return this.mobileService.getHello();
+    // return this.mobileService.getHello();
+    return { text: 'HELLO MAYA-ADMIN 一个项目用MAYA就够了！！！' };
   }
 }

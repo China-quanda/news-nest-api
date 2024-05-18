@@ -32,11 +32,46 @@ model Profile {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  username    String
-  password   String
-  email   String?
-  name    String?
-  posts   Post[]
-  profile Profile?
+  id       Int      @id @default(autoincrement())
+  username String //用户名
+  password String //密码
+  avatar   String? //头像
+  status   Boolean  @default(true) //状态1为开启0为未开启
+  profile  Profile?
+  post     Post[]
+  articles  Article[]
+}
+
+// 文章类别
+model ArticleCategory {
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String // 类别名称
+  keywords    String? //关键词
+  description String? //描述
+  sort        Int        @default(0) // 排序
+  status      Boolean    @default(true) // 是否启用 1 启用 0 禁用
+  articles  Article[]
+}
+
+// 文章
+model Article {
+  id                Int              @id @default(autoincrement())
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  title             String           @db.VarChar(255) // 文章标题
+  isTop             Int              @default(0) // 置顶 0:否、1:是
+  content           String //文章内容
+  coverType         Int              @default(0) // 封面类型 0-无图，1-1张，3-3张,10:自动
+  coverImg          String // 封面的URL地址
+  commentCount      Int              @default(0) // 评论数
+  likeCount         Int              @default(0) // 点赞数
+  collectCount      Int              @default(0) // 收藏数
+  readCount         Int              @default(0) // 阅读数
+  status            Int              @default(1) // 状态(0:草稿;1:审核中;2:审核通过;3审核失败;4:回收站)
+  author            User?             @relation(fields: [authorId], references: [id])
+  authorId          Int?
+  category   ArticleCategory? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
 }

@@ -10,8 +10,13 @@ import {
 import { ArticleCategoryService } from './article-category.service';
 import { CreateArticleCategoryDto } from './dto/create-article-category.dto';
 import { UpdateArticleCategoryDto } from './dto/update-article-category.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ArticleCategory } from '@prisma/client';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ArticleCategoryEntity } from './entities/article-category.entity';
 
 @ApiTags('文章类别')
@@ -23,22 +28,23 @@ export class ArticleCategoryController {
 
   @Post()
   @ApiOperation({ summary: '新增文章类别' })
-  @ApiResponse({ type: [ArticleCategoryEntity] })
+  // @ApiResponse({ type: ArticleCategoryEntity })
+  @ApiCreatedResponse({ type: ArticleCategoryEntity })
   create(@Body() createArticleCategoryDto: CreateArticleCategoryDto) {
     return this.articleCategoryService.create(createArticleCategoryDto);
   }
 
   @Get()
   @ApiOperation({ summary: '获取文章类别列表' })
-  @ApiResponse({ type: [ArticleCategoryEntity] })
-  async findAll(): Promise<ArticleCategory[]> {
-    return await this.articleCategoryService.findAll();
+  @ApiOkResponse({ type: ArticleCategoryEntity, isArray: true })
+  findAll() {
+    return this.articleCategoryService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: '获取文章类别详情' })
   @ApiResponse({ type: ArticleCategoryEntity })
-  findOne(@Param('id') id: number): Promise<ArticleCategory> {
+  findOne(@Param('id') id: number) {
     return this.articleCategoryService.findOne(+id);
   }
 

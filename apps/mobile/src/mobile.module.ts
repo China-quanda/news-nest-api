@@ -4,9 +4,10 @@ import { MobileService } from './mobile.service';
 import { ConfigModule } from '@app/common';
 import { AppModule } from './app/app.module';
 import { ArticleCategoryModule } from './article-category/article-category.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
-  imports: [ConfigModule, AppModule, ArticleCategoryModule],
+  imports: [ConfigModule, AppModule, ArticleCategoryModule, ArticleModule],
   controllers: [MobileController],
   providers: [MobileService],
 })

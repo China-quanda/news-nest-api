@@ -61,15 +61,15 @@ model Article {
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   title             String           @db.VarChar(255) // 文章标题
-  isTop             Int              @default(0) // 置顶 0:否、1:是
+  isTop             Boolean              @default(false) // 置顶 false:否、true:是
   content           String //文章内容
   coverType         Int              @default(0) // 封面类型 0-无图，1-1张，3-3张,10:自动
-  coverImg          String // 封面的URL地址
+  coverImg          String? // 封面的URL地址
   commentCount      Int              @default(0) // 评论数
   likeCount         Int              @default(0) // 点赞数
   collectCount      Int              @default(0) // 收藏数
   readCount         Int              @default(0) // 阅读数
-  status            Int              @default(1) // 状态(0:草稿;1:审核中;2:审核通过;3审核失败;4:回收站)
+  status            Int?              @default(1) // 状态(0:草稿;1:审核中;2:审核通过;3审核失败;4:回收站)
   author            User?             @relation(fields: [authorId], references: [id])
   authorId          Int?
   category   ArticleCategory? @relation(fields: [categoryId], references: [id])

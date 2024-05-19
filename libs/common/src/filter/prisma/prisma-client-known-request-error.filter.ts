@@ -5,7 +5,7 @@ import { Response } from 'express';
 // prisma PrismaClientKnownRequestError link
 // https://www.prisma.io/docs/orm/reference/error-reference#prisma-client-query-engine
 @Catch(Prisma.PrismaClientKnownRequestError)
-export class PrismaClientExceptionFilter extends BaseExceptionFilter {
+export class PrismaClientKnownRequestErrorFilter extends BaseExceptionFilter {
   catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();

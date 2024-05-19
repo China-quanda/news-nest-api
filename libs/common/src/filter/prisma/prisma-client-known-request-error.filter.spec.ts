@@ -1,7 +1,7 @@
-import { PrismaClientExceptionFilter } from './prisma-client-known-request-error.filter';
+import { PrismaClientKnownRequestErrorFilter } from './prisma-client-known-request-error.filter';
 
-describe('PrismaClientExceptionFilter', () => {
+describe('PrismaClientKnownRequestErrorFilter', () => {
   it('should be defined', () => {
-    expect(new PrismaClientExceptionFilter()).toBeDefined();
+    expect(new PrismaClientKnownRequestErrorFilter()).toBeDefined();
   });
 });

@@ -1,13 +1,19 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 // import { AppService } from './app.service';
 import * as path from 'node:path';
 
+
+@ApiTags('application')
 @Controller('app')
 export class AppController {
   // constructor(private readonly appService: AppService) {}
-
-  // 检查app是否需要更新 应该根据app版本来做判断，客户端上传app版本来判断
+  @ApiOperation({
+    summary: '检查app是否需要更新',
+    description:
+      '检查app是否需要更新 应该根据app版本来做判断，客户端上传app版本来判断',
+  })
   @Get('checkForUpdate/:version')
   async checkForUpdate(@Param('version') version: string) {
     const latestVersion = '1.0.3';
@@ -46,8 +52,8 @@ export class AppController {
     return obj;
   }
 
-  // 下载app 根据app版本下载
   @Get('downloadApp/:version')
+  @ApiOperation({ summary: '下载app', description: '根据app版本下载' })
   async downloadApp(@Param('version') version: string, @Res() res: Response) {
     const filePath = path.resolve('public/apps', `sqzls${version}.wgt`);
     res.setHeader('Content-Type', 'application/octet-stream');

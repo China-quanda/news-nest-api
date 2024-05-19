@@ -13,7 +13,7 @@ import { PrismaService } from '@app/common';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'topSecret51',
-      signOptions: { expiresIn: 3600 },
+      signOptions: { expiresIn: '5m' }, // e.g. 30s, 7d, 24h
     }),
   ],
 })

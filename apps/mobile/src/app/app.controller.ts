@@ -1,8 +1,9 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 // import { AppService } from './app.service';
 import * as path from 'node:path';
+import { CheckForUpdateDto } from './dto/check-for-update.dto';
 
 
 @ApiTags('application')
@@ -14,6 +15,7 @@ export class AppController {
     description:
       '检查app是否需要更新 应该根据app版本来做判断，客户端上传app版本来判断',
   })
+  @ApiOkResponse({ type: CheckForUpdateDto })
   @Get('checkForUpdate/:version')
   async checkForUpdate(@Param('version') version: string) {
     const latestVersion = '1.0.3';

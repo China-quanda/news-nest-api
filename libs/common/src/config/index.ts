@@ -6,6 +6,7 @@ export interface IConfig {
    */
   jwt?: {
     secret: string;
+    signOptions: { expiresIn: string };
   };
   /**
    * 文件上传路径， 绝对路径  例如： E:/upload/test

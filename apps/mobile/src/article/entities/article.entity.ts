@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Article, ArticleCategory } from '@prisma/client';
+import { Article } from '@prisma/client';
+import { UserEntity } from '../../user/entities/user.entity';
+import { ArticleCategoryEntity } from '../../article-category/entities/article-category.entity';
 
 export class ArticleEntity implements Article {
   @ApiProperty({ description: 'id' })
@@ -72,14 +74,18 @@ export class ArticleEntity implements Article {
   })
   authorId: number;
 
-  // @ApiProperty({ description: '作者' })
-  // author: User;
+  @ApiProperty({ description: '作者', required: false, type: UserEntity })
+  author?: UserEntity;
 
   @ApiProperty({
     description: '文章类别id',
   })
   categoryId: number;
 
-  @ApiProperty({ description: '文章类别' })
-  category: ArticleCategory;
+  @ApiProperty({
+    description: '文章类别',
+    required: false,
+    type: ArticleCategoryEntity,
+  })
+  category?: ArticleCategoryEntity;
 }

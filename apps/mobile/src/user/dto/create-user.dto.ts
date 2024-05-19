@@ -33,7 +33,7 @@ export class CreateUserDto implements Prisma.UserCreateInput {
     required: false,
     default: true,
   })
-  status: boolean;
+  status?: boolean;
 
   @ApiProperty({
     description: '文章',

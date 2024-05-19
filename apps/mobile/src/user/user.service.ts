@@ -8,7 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '@app/common';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -37,6 +37,13 @@ export class UserService {
   async findOne(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException(`Not Found user a id:${id}`);
+    return user;
+  }
+
+  async findOneUser(where: Prisma.UserWhereInput): Promise<User> {
+    const user = await this.prisma.user.findFirst({ where: where });
+    // findUnique({ where: { username } });
+    if (!user) throw new NotFoundException();
     return user;
   }
 

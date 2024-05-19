@@ -8,7 +8,7 @@ import { PrismaService } from '@app/common';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, UserService, PrismaService],
+  providers: [AuthService, PrismaService, UserService],
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({

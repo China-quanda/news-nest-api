@@ -5,9 +5,16 @@ import { ConfigModule } from '@app/common';
 import { AppModule } from './app/app.module';
 import { ArticleCategoryModule } from './article-category/article-category.module';
 import { ArticleModule } from './article/article.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ConfigModule, AppModule, ArticleCategoryModule, ArticleModule],
+  imports: [
+    ConfigModule,
+    AppModule,
+    ArticleCategoryModule,
+    ArticleModule,
+    UserModule,
+  ],
   controllers: [MobileController],
   providers: [MobileService],
 })

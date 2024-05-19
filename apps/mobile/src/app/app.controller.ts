@@ -5,7 +5,6 @@ import type { Response } from 'express';
 import * as path from 'node:path';
 import { CheckForUpdateDto } from './dto/check-for-update.dto';
 
-
 @ApiTags('application')
 @Controller('app')
 export class AppController {

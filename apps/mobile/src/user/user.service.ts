@@ -15,17 +15,13 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { username, password } = createUserDto;
     const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(password, salt);
-    console.log('hash', hash, 'password', password);
+    createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
+
     const user = await this.prisma.user.create({
-      data: {
-        ...createUserDto,
-        username: username,
-        password: hash,
-      },
+      data: createUserDto,
     });
+
     return user;
   }
 
@@ -48,6 +44,10 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    if (updateUserDto.password) {
+      const salt = await bcrypt.genSalt();
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
+    }
     try {
       const user = await this.prisma.user.update({
         where: { id },

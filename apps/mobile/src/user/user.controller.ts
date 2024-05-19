@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -15,10 +16,12 @@ import {
   ApiOperation,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @ApiTags('用户')
 @Controller('user')
 export class UserController {
@@ -32,6 +35,8 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: '获取用户列表' })
   @ApiOkResponse({ type: UserEntity, isArray: true })
   findAll() {

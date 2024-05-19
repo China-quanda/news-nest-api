@@ -19,6 +19,7 @@ async function bootstrap() {
     .setTitle('移动端api文档')
     .setDescription('这是移动端的api文档')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('document', app, document);

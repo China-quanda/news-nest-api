@@ -47,7 +47,7 @@ export class UserController {
 
   @Patch(':id')
   @ApiOperation({ summary: '更新用户资料' })
-  @ApiOkResponse({ type: UserEntity })
+  @ApiCreatedResponse({ type: UserEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,

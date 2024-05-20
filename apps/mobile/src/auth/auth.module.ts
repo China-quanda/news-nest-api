@@ -16,6 +16,7 @@ const { jwt } = appConfig();
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
+      global: true,
       secret: jwt.secret,
       signOptions: jwt.signOptions,
     }),

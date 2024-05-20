@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ArticleCategory } from '@prisma/client';
 
-export class ArticleCategoryEntity {
+export class ArticleCategoryEntity implements ArticleCategory {
   @ApiProperty({ description: 'id' })
   id: number;
   @ApiProperty({ description: '创建时间' })
-  createdAt: string;
+  createdTime: Date;
   @ApiProperty({ description: '更新时间' })
-  updatedAt: string;
+  updatedTime: Date;
   @ApiProperty({ description: '类别名称' })
   name: string;
   @ApiProperty({ description: '描述' })

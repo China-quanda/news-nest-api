@@ -7,9 +7,9 @@ export class ArticleEntity implements Article {
   @ApiProperty({ description: 'id' })
   id: number;
   @ApiProperty({ description: '创建时间' })
-  createdAt: Date;
+  createdTime: Date;
   @ApiProperty({ description: '更新时间' })
-  updatedAt: Date;
+  updatedTime: Date;
   @ApiProperty({ description: '文章标题' })
   title: string;
   @ApiProperty({

@@ -8,7 +8,20 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '@app/common';
-import { Prisma, User } from '@prisma/client';
+import {
+  Prisma,
+  User,
+  UserArticleCollect,
+  UserArticleFavorite,
+} from '@prisma/client';
+import {
+  CreateUserArticleFavoriteDto,
+  UpdateUserArticleFavoriteDto,
+} from './dto/user-article-favorite.dto';
+import {
+  UpdateUserArticleCollectDtoDto,
+  UserArticleCollectDto,
+} from './dto/user-article-collect.dto';
 
 @Injectable()
 export class UserService {
@@ -76,5 +89,114 @@ export class UserService {
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return flag;
+  }
+
+  async createArticleFavorites(
+    body: CreateUserArticleFavoriteDto,
+  ): Promise<UserArticleFavorite> {
+    const result = await this.prisma.userArticleFavorite.create({
+      data: body,
+    });
+
+    return result;
+  }
+
+  async findAllArticleFavorites(): Promise<UserArticleFavorite[]> {
+    const result = await this.prisma.userArticleFavorite.findMany({
+      include: {
+        collects: {
+          include: {
+            article: true,
+          },
+        },
+      },
+    });
+    return result;
+  }
+
+  async findOneArticleFavorites(id: number): Promise<UserArticleFavorite> {
+    const result = await this.prisma.userArticleFavorite.findUnique({
+      where: { id },
+      include: {
+        collects: true,
+      },
+    });
+    if (!result) throw new NotFoundException();
+    return result;
+  }
+
+  async updateArticleFavorites(
+    id: number,
+    body: UpdateUserArticleFavoriteDto,
+  ): Promise<UserArticleFavorite> {
+    try {
+      const result = await this.prisma.userArticleFavorite.update({
+        where: { id },
+        data: body,
+      });
+      if (!result) throw new NotFoundException(`Not Found  id:${id}`);
+      return result;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('要更新的目标不存在！');
+      }
+    }
+  }
+
+  async removeArticleFavorites(id: number): Promise<UserArticleFavorite> {
+    try {
+      const result = await this.prisma.userArticleFavorite.delete({
+        where: { id },
+      });
+      if (!result) throw new NotFoundException(`Not Found a id:${id}`);
+      return result;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('要删除的目标不存在！');
+      }
+      throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async createArticleCollect(
+    body: UserArticleCollectDto,
+  ): Promise<UserArticleCollect> {
+    const result = await this.prisma.userArticleCollect.create({
+      data: body,
+    });
+    return result;
+  }
+
+  async removeArticleCollect(id: number): Promise<UserArticleCollect> {
+    try {
+      const result = await this.prisma.userArticleCollect.delete({
+        where: { id },
+      });
+      if (!result) throw new NotFoundException(`Not Found a id:${id}`);
+      return result;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('要删除的目标不存在！');
+      }
+      throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async updateArticleCollect(
+    id: number,
+    body: UpdateUserArticleCollectDtoDto,
+  ): Promise<UserArticleCollect> {
+    try {
+      const result = await this.prisma.userArticleCollect.update({
+        where: { id },
+        data: body,
+      });
+      if (!result) throw new NotFoundException(`Not Found  id:${id}`);
+      return result;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('要更新的目标不存在！');
+      }
+    }
   }
 }

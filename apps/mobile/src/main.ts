@@ -2,17 +2,29 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { MobileModule } from './mobile.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { PrismaClientKnownRequestErrorFilter } from '@app/common/filter';
+import {
+  HttpExceptionFilter,
+  PrismaClientKnownRequestErrorFilter,
+} from '@app/common/filter';
 // import { join } from 'node:path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(MobileModule);
+
   app.setGlobalPrefix('/api');
+
   const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new PrismaClientKnownRequestErrorFilter(httpAdapter));
+
+  app.useGlobalFilters(
+    new PrismaClientKnownRequestErrorFilter(httpAdapter),
+    new HttpExceptionFilter(),
+  );
+
   app.useStaticAssets('public', { prefix: '/public' });
   // app.setBaseViewsDir(join(__dirname, '../', 'views'));
+
   app.setBaseViewsDir('views');
+
   app.setViewEngine('ejs');
 
   const config = new DocumentBuilder()
@@ -21,6 +33,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('document', app, document);
 

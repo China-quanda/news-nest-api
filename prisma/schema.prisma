@@ -32,19 +32,20 @@ datasource db {
 // }
 
 model User {
-  id                 Int                   @id @default(autoincrement())
-  createdTime        DateTime              @default(now())
-  updatedTime        DateTime              @updatedAt
-  username           String //用户名
-  password           String //密码
-  avatar             String? //头像
-  status             Boolean               @default(true) //状态1为开启0为未开启
+  id               Int                   @id @default(autoincrement())
+  createdTime      DateTime              @default(now())
+  updatedTime      DateTime              @updatedAt
+  username         String //用户名
+  password         String //密码
+  avatar           String? //头像
+  status           Boolean               @default(true) //状态1为开启0为未开启
   // profile  Profile?
   // post     Post[]
-  articles           Article[]
-  articleFavorites   UserArticleFavorite[]
-  commentUsers       UserArticleComment[] @relation("commentUser")
-  replyUsers         UserArticleComment[] @relation("replyUser")
+  articles         Article[]
+  articleFavorites UserArticleFavorite[]
+  commentUsers     UserArticleComment[]  @relation("commentUser")
+  replyUsers       UserArticleComment[]  @relation("replyUser")
+  articleLikes  UserArticleLike[]
 }
 
 // 文章类别
@@ -62,25 +63,26 @@ model ArticleCategory {
 
 // 文章
 model Article {
-  id           Int                  @id @default(autoincrement())
-  createdTime  DateTime             @default(now())
-  updatedTime  DateTime             @updatedAt
-  title        String               @db.VarChar(255) // 文章标题
-  isTop        Boolean              @default(false) // 置顶 false:否、true:是
-  content      String //文章内容
-  coverType    Int                  @default(0) // 封面类型 0-无图，1-1张，3-3张,10:自动
-  coverImg     String? // 封面的URL地址
-  commentCount Int                  @default(0) // 评论数
-  likeCount    Int                  @default(0) // 点赞数
-  collectCount Int                  @default(0) // 收藏数
-  readCount    Int                  @default(0) // 阅读数
-  status       Int?                 @default(1) // 状态(0:草稿;1:审核中;2:审核通过;3审核失败;4:回收站)
-  author       User?                @relation(fields: [authorId], references: [id])
-  authorId     Int?
-  category     ArticleCategory?     @relation(fields: [categoryId], references: [id])
-  categoryId   Int?
-  collects     UserArticleCollect[]
-  comments     UserArticleComment[]
+  id              Int                  @id @default(autoincrement())
+  createdTime     DateTime             @default(now())
+  updatedTime     DateTime             @updatedAt
+  title           String               @db.VarChar(255) // 文章标题
+  isTop           Boolean              @default(false) // 置顶 false:否、true:是
+  content         String //文章内容
+  coverType       Int                  @default(0) // 封面类型 0-无图，1-1张，3-3张,10:自动
+  coverImg        String? // 封面的URL地址
+  commentCount    Int                  @default(0) // 评论数
+  likeCount       Int                  @default(0) // 点赞数
+  collectCount    Int                  @default(0) // 收藏数
+  readCount       Int                  @default(0) // 阅读数
+  status          Int?                 @default(1) // 状态(0:草稿;1:审核中;2:审核通过;3审核失败;4:回收站)
+  author          User?                @relation(fields: [authorId], references: [id])
+  authorId        Int?
+  category        ArticleCategory?     @relation(fields: [categoryId], references: [id])
+  categoryId      Int?
+  collects        UserArticleCollect[]
+  comments        UserArticleComment[]
+  articleLikes UserArticleLike[]
 }
 
 // 用户文章收藏夹
@@ -112,14 +114,25 @@ model UserArticleComment {
   updatedTime   DateTime @updatedAt
   parentId      Int?     @default(0) // 父id，父id为0说明评论文章，否则为回复评论
   content       String //评论内容
-  isTop         Int?      @default(0) // 置顶 0:否、1:是
-  commentCount  Int?      @default(0) // 评论数
-  likeCount     Int?      @default(0) // 点赞数
-  status        Int?      @default(2) // 是状态(1:审核中;2:审核通过;3审核失败;)
+  isTop         Int?     @default(0) // 置顶 0:否、1:是
+  commentCount  Int?     @default(0) // 评论数
+  likeCount     Int?     @default(0) // 点赞数
+  status        Int?     @default(2) // 是状态(1:审核中;2:审核通过;3审核失败;)
   article       Article? @relation(fields: [articleId], references: [id])
   articleId     Int //被评论的文章
-  commentUser   User?    @relation( "commentUser",fields: [commentUserId], references: [id])
+  commentUser   User?    @relation("commentUser", fields: [commentUserId], references: [id])
   commentUserId Int //评论用户id
-  replyUser     User?    @relation( "replyUser",fields: [replyUserId], references: [id])
+  replyUser     User?    @relation("replyUser", fields: [replyUserId], references: [id])
   replyUserId   Int //被回复的用户id
+}
+
+// 用户文章点赞表
+model UserArticleLike {
+  id        Int      @id @default(autoincrement())
+  createdTime DateTime @default(now())
+  updatedTime DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int
+  article   Article? @relation(fields: [articleId], references: [id])
+  articleId Int
 }

@@ -8,6 +8,7 @@ import { ArticleModule } from './article/article.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { UserArticleCommentModule } from './user-article-comment/user-article-comment.module';
+import { UserArticleLikeModule } from './user-article-like/user-article-like.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserArticleCommentModule } from './user-article-comment/user-article-co
     UserModule,
     AuthModule,
     UserArticleCommentModule,
+    UserArticleLikeModule,
   ],
   controllers: [MobileController],
   providers: [MobileService],

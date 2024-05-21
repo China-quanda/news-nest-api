@@ -112,34 +112,6 @@ model Article {
   articleCommentId  Int?
 }
 
-// 文章类别
-// model ArticleCategory {
-//   id          Int       @id @default(autoincrement())
-//   createdAt   DateTime  @default(now())
-//   updatedAt   DateTime  @updatedAt
-//   name        String // 类别名称
-//   keywords    String? //关键词
-//   description String? //描述
-//   sort        Int       @default(0) // 排序
-//   status      Int       @default(1) // 是否启用 1 启用 0 禁用
-//   articles    Article[]
-// }
-
-// 文章评论
-model ArticleComment {
-  id             Int       @id @default(autoincrement())
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  parentId       Int? // 父id，父id为0说明评论文章，否则为回复评论
-  content        String //评论内容
-  isTop          Int       @default(0) // 置顶 0:否、1:是
-  commentCount   Int       @default(0) // 评论数
-  likeCount      Int       @default(0) // 点赞数
-  status         Int       @default(2) // 是状态(1:审核中;2:审核通过;3审核失败;)
-  commentUser    User[] // 评论用户
-  replyUser      User[] // 被回复的用户
-  commentArticle Article[] // 评论文章
-}
 
 // 用户文章收藏表
 model UserArticleCollect {
@@ -152,16 +124,7 @@ model UserArticleCollect {
   articleId Int
 }
 
-// 用户文章点赞表
-model UserArticleLike {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  article   Article  @relation(fields: [articleId], references: [id])
-  articleId Int
-}
+
 
 // 文章举报表
 model ArticleReport {

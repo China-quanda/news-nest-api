@@ -9,7 +9,9 @@ import {
 // import { join } from 'node:path';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(MobileModule);
+  const app = await NestFactory.create<NestExpressApplication>(MobileModule, {
+    logger: ['error', 'warn'],
+  });
 
   app.setGlobalPrefix('/api');
 

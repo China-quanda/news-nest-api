@@ -6,5 +6,6 @@ import { PrismaService } from '@app/common';
 @Module({
   controllers: [UserSearchController],
   providers: [UserSearchService, PrismaService],
+  exports: [UserSearchService],
 })
 export class UserSearchModule {}

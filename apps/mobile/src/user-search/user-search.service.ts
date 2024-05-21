@@ -15,11 +15,32 @@ import { ResultList } from '@app/common/utils/result';
 export class UserSearchService {
   constructor(private prisma: PrismaService) {}
   async create(body: CreateUserSearchDto): Promise<UserSearch> {
-    const result = await this.prisma.userSearch.create({
-      data: body,
+    const isSearch = await this.prisma.userSearch.findFirst({
+      where: {
+        AND: { userId: body.userId, keywords: body.keywords },
+      },
     });
-    if (!result) throw new HttpException('创建失败！', HttpStatus.BAD_REQUEST);
-    return result;
+    if (isSearch?.id) {
+      // 如果用户之前搜索过这个词，就让number搜索次数+1
+      const upRes = await this.prisma.userSearch.update({
+        where: { id: isSearch.id },
+        data: {
+          searchCount: {
+            increment: 1,
+          },
+        },
+      });
+      if (!upRes?.id) {
+        throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    } else {
+      const result = await this.prisma.userSearch.create({
+        data: body,
+      });
+      if (!result)
+        throw new HttpException('创建失败！', HttpStatus.BAD_REQUEST);
+      return result;
+    }
   }
 
   async findAll(query?: BaseQueryDto): Promise<ResultList<UserSearch[]>> {
@@ -87,4 +108,26 @@ export class UserSearchService {
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  // 获取热门搜索
+  // async getHotSearch(query) {
+  //   const { pageNum = 1, pageSize = 10, where = {} } = query;
+  //   const [list, total] = await this.entity.findAndCount({
+  //     where,
+  //     order: {
+  //       searchCount: 'DESC', // 根据搜索量倒序排序
+  //     },
+  //     take: pageSize,
+  //     skip: (pageNum - 1) * pageSize,
+  //   });
+  //   return { list, pagination: { total, pageSize, pageNum } };
+  // }
+
+  // 获取搜索联想建议列表
+  // async getAdvicelist(msg) {
+  //   const result: any = await this.httpService.request({
+  //     url: `https://api.52vmy.cn/api/wl/word/baidu?msg=${msg}`,
+  //   });
+  //   return result.data.data || [];
+  // }
 }

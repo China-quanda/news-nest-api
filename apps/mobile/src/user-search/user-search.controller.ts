@@ -60,4 +60,15 @@ export class UserSearchController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.userSearchService.remove(id);
   }
+  // @Get('/getHotSearch', { description: '获取热门搜索' })
+  // async getHotSearch(@Query() query) {
+  //   const result = await this.service.getHotSearch(query);
+  //   return this.success(result);
+  // }
+
+  // @Get('/getAdvicelist', { description: '获取搜索联想建议列表' })
+  // async getAdvicelist(@Query('msg') msg: string) {
+  //   const result = await this.service.getAdvicelist(msg);
+  //   return this.success(result);
+  // }
 }

@@ -26,7 +26,7 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post()
-  @ApiOperation({ summary: '新增文章类别' })
+  @ApiOperation({ summary: '新增文章' })
   @ApiCreatedResponse({ type: ArticleEntity })
   create(@Body() createArticleDto: CreateArticleDto) {
     return this.articleService.create(createArticleDto);
@@ -35,8 +35,8 @@ export class ArticleController {
   @Get()
   @ApiOperation({ summary: '获取文章列表' })
   @ApiOkResponse({ type: ArticleEntity, isArray: true })
-  findAll() {
-    return this.articleService.findAll();
+  findAll(@Query() query: any) {
+    return this.articleService.findAll(query);
   }
 
   @Get(':id')
@@ -46,12 +46,12 @@ export class ArticleController {
     return this.articleService.findOne(+id);
   }
 
-  @Get('getHotArticle')
-  @ApiOperation({ summary: '获取热门文章' })
-  @ApiOkResponse({ type: ArticleEntity })
-  getHotArticle(@Query() query: any) {
-    return this.articleService.getHotArticle(query);
-  }
+  // @Get('getHotArticle')
+  // @ApiOperation({ summary: '获取热门文章' })
+  // @ApiOkResponse({ type: ArticleEntity })
+  // getHotArticle(@Query() query: any) {
+  //   return this.articleService.getHotArticle(query);
+  // }
 
   @Patch(':id')
   @ApiOperation({ summary: '更新文章' })

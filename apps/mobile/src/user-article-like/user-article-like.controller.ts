@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { UserArticleLikeService } from './user-article-like.service';
 import { CreateUserArticleLikeDto } from './dto/create-user-article-like.dto';
@@ -35,8 +36,8 @@ export class UserArticleLikeController {
   @Get()
   @ApiOperation({ summary: '获取用户文章点赞列表' })
   @ApiOkResponse({ type: UserArticleLikeEntity, isArray: true })
-  findAll() {
-    return this.userArticleLikeService.findAll();
+  findAll(@Query() query) {
+    return this.userArticleLikeService.findAll(query);
   }
 
   @Get(':id')

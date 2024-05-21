@@ -151,17 +151,6 @@ model ArticleCommentLike {
   commentId Int
 }
 
-// 用户搜索表
-model UserSearch {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  searchCount Int      @default(1) // 搜索的次数
-  keywords    String //搜索关键词
-  type        Int // 搜索类型 1 文章 2 用户 3 评论 4 专栏 5 问答
-  user        User     @relation(fields: [userId], references: [id])
-  userId      Int // 搜索的用户id
-}
 
 // 用户文章浏览表
 model UserArticleView {

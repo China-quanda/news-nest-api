@@ -4,26 +4,25 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserArticleLikeDto } from './dto/create-user-article-like.dto';
-import { UpdateUserArticleLikeDto } from './dto/update-user-article-like.dto';
-import { UserArticleLike } from '@prisma/client';
+import { CreateUserSearchDto } from './dto/create-user-search.dto';
+import { UpdateUserSearchDto } from './dto/update-user-search.dto';
+import { UserSearch } from '@prisma/client';
 import { PrismaService } from '@app/common';
 import { BaseQueryDto } from '@app/common/dto';
 import { ResultList } from '@app/common/utils/result';
 
 @Injectable()
-export class UserArticleLikeService {
+export class UserSearchService {
   constructor(private prisma: PrismaService) {}
-
-  async create(body: CreateUserArticleLikeDto): Promise<UserArticleLike> {
-    const result = await this.prisma.userArticleLike.create({
+  async create(body: CreateUserSearchDto): Promise<UserSearch> {
+    const result = await this.prisma.userSearch.create({
       data: body,
     });
     if (!result) throw new HttpException('创建失败！', HttpStatus.BAD_REQUEST);
     return result;
   }
 
-  async findAll(query?: BaseQueryDto): Promise<ResultList<UserArticleLike[]>> {
+  async findAll(query?: BaseQueryDto): Promise<ResultList<UserSearch[]>> {
     query = Object.assign(
       {
         ...query,
@@ -35,11 +34,11 @@ export class UserArticleLikeService {
     query.pageNum = Number(query.pageNum);
     query.pageSize = Number(query.pageSize);
     console.log('query', query);
-    const result = await this.prisma.userArticleLike.findMany({
+    const result = await this.prisma.userSearch.findMany({
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.userArticleLike.count();
+    const total = await this.prisma.userSearch.count();
     return {
       list: result,
       pagination: {
@@ -51,19 +50,15 @@ export class UserArticleLikeService {
   }
 
   async findOne(id: number) {
-    const result = await this.prisma.userArticleLike.findUnique({
+    const result = await this.prisma.userSearch.findUnique({
       where: { id },
     });
     if (!result) throw new NotFoundException(`Not Found a id:${id}`);
     return result;
   }
-
-  async update(
-    id: number,
-    body: UpdateUserArticleLikeDto,
-  ): Promise<UserArticleLike> {
+  async update(id: number, body: UpdateUserSearchDto): Promise<UserSearch> {
     try {
-      const result = await this.prisma.userArticleLike.update({
+      const result = await this.prisma.userSearch.update({
         where: { id },
         data: body,
       });
@@ -77,9 +72,9 @@ export class UserArticleLikeService {
     }
   }
 
-  async remove(id: number): Promise<UserArticleLike> {
+  async remove(id: number): Promise<UserSearch> {
     try {
-      const result = await this.prisma.userArticleLike.delete({
+      const result = await this.prisma.userSearch.delete({
         where: { id },
       });
       if (!result) throw new NotFoundException(`Not Found a id:${id}`);

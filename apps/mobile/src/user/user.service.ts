@@ -161,6 +161,10 @@ export class UserService {
   async createArticleCollect(
     body: UserArticleCollectDto,
   ): Promise<UserArticleCollect> {
+    // 1、先判断当前用户是否已经收藏过
+    // 如果收藏过了，就提示您已经收藏过了！
+
+    // 2、没收藏过就创建收藏
     const result = await this.prisma.userArticleCollect.create({
       data: body,
     });

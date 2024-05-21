@@ -7,6 +7,7 @@ import { ArticleCategoryModule } from './article-category/article-category.modul
 import { ArticleModule } from './article/article.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { UserArticleCommentModule } from './user-article-comment/user-article-comment.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
     ArticleModule,
     UserModule,
     AuthModule,
+    UserArticleCommentModule,
   ],
   controllers: [MobileController],
   providers: [MobileService],

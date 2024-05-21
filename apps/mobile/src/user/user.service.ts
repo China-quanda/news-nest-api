@@ -168,6 +168,25 @@ export class UserService {
     const result = await this.prisma.userArticleCollect.create({
       data: body,
     });
+    if (!result) {
+      throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // 3、收藏成功后更新文章收藏数
+    const article = await this.prisma.article.update({
+      where: {
+        id: body.articleId,
+      },
+      data: {
+        collectCount: {
+          increment: 1,
+        },
+      },
+    });
+    if (!article?.id) {
+      throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     return result;
   }
 
@@ -177,6 +196,21 @@ export class UserService {
         where: { id },
       });
       if (!result) throw new NotFoundException(`Not Found a id:${id}`);
+
+      const article = await this.prisma.article.update({
+        where: {
+          id: result.articleId,
+        },
+        data: {
+          collectCount: {
+            decrement: 1,
+          },
+        },
+      });
+      if (!article?.id) {
+        throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
       return result;
     } catch (error) {
       if (error.code === 'P2025') {

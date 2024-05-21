@@ -138,4 +138,6 @@ export class UserController {
   removeArticleCollect(@Param('id', ParseIntPipe) id: number) {
     return this.userService.removeArticleCollect(id);
   }
+
+  // 根据文章id判断用户是否已收藏
 }

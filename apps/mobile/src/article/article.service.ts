@@ -21,8 +21,15 @@ export class ArticleService {
     });
   }
 
-  async findAll(): Promise<Article[]> {
-    const users = await this.prisma.article.findMany({
+  async findAll(query?: any): Promise<Article[]> {
+    console.log('query', query);
+    // 当用户搜索文章时 调用新增用户搜索记录接口
+    //  if (query.keywords) {
+    //   await this.articleSearchService.create(query.keywords);
+    //   where.title = ILike(`%${query.keywords}%`);
+    // }
+
+    const result = await this.prisma.article.findMany({
       include: {
         category: {
           select: {
@@ -38,7 +45,12 @@ export class ArticleService {
         },
       },
     });
-    return users;
+    return result;
+  }
+
+  async getHotArticle(query): Promise<Article[]> {
+    const result = await this.findAll(query);
+    return result;
   }
 
   async findOne(id: number): Promise<Article> {
@@ -60,6 +72,21 @@ export class ArticleService {
       },
     });
     if (!res) throw new NotFoundException();
+    // 文章阅读统计+1
+    const upRes = await this.prisma.article.update({
+      where: { id },
+      data: {
+        readCount: {
+          increment: 1,
+        },
+      },
+    });
+    if (!upRes?.id) {
+      throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // 获取文章详情信息成功的话就新增一条用户查看 浏览记录
+    // await this.articleViewService.createUserView(id);
     return res;
   }
 

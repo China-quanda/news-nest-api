@@ -140,4 +140,8 @@ export class UserController {
   }
 
   // 根据文章id判断用户是否已收藏
+  // isCollect
+
+  // getUserCollectList
+  // 获取用户收藏文章列表 根据用户id
 }

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -43,6 +44,13 @@ export class ArticleController {
   @ApiOkResponse({ type: ArticleEntity })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.articleService.findOne(+id);
+  }
+
+  @Get('getHotArticle')
+  @ApiOperation({ summary: '获取热门文章' })
+  @ApiOkResponse({ type: ArticleEntity })
+  getHotArticle(@Query() query: any) {
+    return this.articleService.getHotArticle(query);
   }
 
   @Patch(':id')

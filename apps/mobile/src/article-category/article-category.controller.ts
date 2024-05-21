@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  ParseArrayPipe,
 } from '@nestjs/common';
 import { ArticleCategoryService } from './article-category.service';
 import { CreateArticleCategoryDto } from './dto/create-article-category.dto';
 import { UpdateArticleCategoryDto } from './dto/update-article-category.dto';
 import {
+  ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -18,6 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ArticleCategoryEntity } from './entities/article-category.entity';
+import { DeleteArticleCategoryDto } from './dto/delete-article-category.dto';
 
 @ApiTags('文章类别')
 @Controller('article-category')
@@ -62,5 +65,14 @@ export class ArticleCategoryController {
   @ApiOperation({ summary: '删除文章类别' })
   remove(@Param('id') id: number) {
     return this.articleCategoryService.remove(+id);
+  }
+
+  @Post('deleteMany')
+  @ApiOperation({ summary: '批量删除文章类别' })
+  @ApiBody({
+    type: DeleteArticleCategoryDto,
+  })
+  deleteMany(@Body('ids', ParseArrayPipe) ids: number[]) {
+    return this.articleCategoryService.deleteMany(ids);
   }
 }

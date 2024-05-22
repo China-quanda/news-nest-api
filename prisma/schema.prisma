@@ -48,6 +48,7 @@ model User {
   articleLikes  UserArticleLike[]
   searchs  UserSearch[]
   articleViews UserArticleView[]
+  articleReports UserArticleReport[]
 }
 
 // 文章类别
@@ -86,6 +87,7 @@ model Article {
   comments        UserArticleComment[]
   articleLikes UserArticleLike[]
   articleViews UserArticleView[]
+  articleReports UserArticleReport[]
 }
 
 // 用户文章收藏夹
@@ -162,4 +164,18 @@ model UserArticleView {
   userId      Int // // 浏览文章的用户id
   article     Article?  @relation(fields: [articleId], references: [id])
   articleId   Int //被浏览的文章id
+}
+
+// 文章举报表
+model UserArticleReport {
+  id        Int      @id @default(autoincrement())
+  createdTime DateTime @default(now())
+  updatedTime DateTime @updatedAt
+  type      Int      @default(0) // 举报类型： 0-其他问题，1-标题夸张，2-低俗色情，3-错别字多，4-旧闻重复，5-广告软文，6-内容不实，7-涉嫌违法犯罪，8-侵权
+  remark    String //举报描述文字
+  status    Int?      @default(1) //审核状态(0:审核失败;1:审核中;2:审核完成,内容未违规,3:审核完成,内容违规已删除该文章)
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    Int  // 举报的用户id
+  article   Article?  @relation(fields: [articleId], references: [id])
+  articleId Int //被举报的文章id
 }

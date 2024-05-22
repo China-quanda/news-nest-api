@@ -11,6 +11,7 @@ import { UserArticleCommentModule } from './user-article-comment/user-article-co
 import { UserArticleLikeModule } from './user-article-like/user-article-like.module';
 import { UserSearchModule } from './user-search/user-search.module';
 import { UserArticleViewModule } from './user-article-view/user-article-view.module';
+import { UserArticleReportModule } from './user-article-report/user-article-report.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UserArticleViewModule } from './user-article-view/user-article-view.mod
     UserArticleLikeModule,
     UserSearchModule,
     UserArticleViewModule,
+    UserArticleReportModule,
   ],
   controllers: [MobileController],
   providers: [MobileService],

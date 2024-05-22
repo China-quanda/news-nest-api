@@ -11,12 +11,14 @@ import { Article } from '@prisma/client';
 import { UserSearchService } from '../user-search/user-search.service';
 // import { BaseQueryDto } from '@app/common/dto';
 import { ResultList } from '@app/common/utils/result';
+import { UserArticleViewService } from '../user-article-view/user-article-view.service';
 
 @Injectable()
 export class ArticleService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userSearchService: UserSearchService,
+    private readonly userArticleViewService: UserArticleViewService,
   ) {}
   async create(createArticleDto: CreateArticleDto): Promise<Article> {
     // return 'This action adds a new article';
@@ -40,7 +42,7 @@ export class ArticleService {
     query.pageSize = Number(query.pageSize);
     console.log('query', query);
     // 当用户搜索文章时 调用新增用户搜索记录接口
-    if (!query?.keywords) {
+    if (query?.keywords) {
       const searchRes = await this.userSearchService.create({
         keywords: 'java',
         type: 1,
@@ -140,6 +142,10 @@ export class ArticleService {
 
     // 获取文章详情信息成功的话就新增一条用户查看 浏览记录
     // await this.articleViewService.createUserView(id);
+    this.userArticleViewService.create({
+      userId: 2,
+      articleId: res.id,
+    });
     return res;
   }
 

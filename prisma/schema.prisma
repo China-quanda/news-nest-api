@@ -47,6 +47,7 @@ model User {
   replyUsers       UserArticleComment[]  @relation("replyUser")
   articleLikes  UserArticleLike[]
   searchs  UserSearch[]
+  articleViews UserArticleView[]
 }
 
 // 文章类别
@@ -84,6 +85,7 @@ model Article {
   collects        UserArticleCollect[]
   comments        UserArticleComment[]
   articleLikes UserArticleLike[]
+  articleViews UserArticleView[]
 }
 
 // 用户文章收藏夹
@@ -148,4 +150,16 @@ model UserSearch {
   type        Int // 搜索类型 1 文章 2 用户 3 评论 4 专栏 5 问答
   user        User?     @relation(fields: [userId], references: [id])
   userId      Int // 搜索的用户id
+}
+
+// 用户文章浏览表
+model UserArticleView {
+  id          Int      @id @default(autoincrement())
+  createdTime   DateTime @default(now())
+  updatedTime   DateTime @updatedAt
+  viewCount Int?      @default(1) // 浏览的次数
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      Int // // 浏览文章的用户id
+  article     Article?  @relation(fields: [articleId], references: [id])
+  articleId   Int //被浏览的文章id
 }

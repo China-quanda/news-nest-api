@@ -188,17 +188,6 @@ model QrCode {
   status    Int      @default(1) //状态 1:未确认 2:已扫码 3:确认授权 4:取消授权 5:已过期 
 }
 
-// 用户设备
-model UserDevice {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  deviceNo    String // 设备编号
-  deviceBrand String // 设备品牌
-  status      Int      @default(0) // '准入状态 1 准入 0不准入
-  user        User     @relation(fields: [userId], references: [id])
-  userId      Int
-}
 
 // 机构
 model OrganizationOrg {

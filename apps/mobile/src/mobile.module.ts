@@ -12,6 +12,7 @@ import { UserArticleLikeModule } from './user-article-like/user-article-like.mod
 import { UserSearchModule } from './user-search/user-search.module';
 import { UserArticleViewModule } from './user-article-view/user-article-view.module';
 import { UserArticleReportModule } from './user-article-report/user-article-report.module';
+import { SysUserDeviceModule } from './sys-user-device/sys-user-device.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UserArticleReportModule } from './user-article-report/user-article-repo
     UserSearchModule,
     UserArticleViewModule,
     UserArticleReportModule,
+    SysUserDeviceModule,
   ],
   controllers: [MobileController],
   providers: [MobileService],

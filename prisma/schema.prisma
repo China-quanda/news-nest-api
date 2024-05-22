@@ -49,6 +49,7 @@ model User {
   searchs  UserSearch[]
   articleViews UserArticleView[]
   articleReports UserArticleReport[]
+  devices SysUserDevice[]
 }
 
 // 文章类别
@@ -178,4 +179,17 @@ model UserArticleReport {
   userId    Int  // 举报的用户id
   article   Article?  @relation(fields: [articleId], references: [id])
   articleId Int //被举报的文章id
+}
+
+// 用户设备
+model SysUserDevice {
+  id          Int      @id @default(autoincrement())
+  createdTime   DateTime @default(now())
+  updatedTime   DateTime @updatedAt
+  deviceOs          String // 设备系统
+  deviceNo    String // 设备编号
+  deviceBrand String // 设备品牌
+  status      Boolean?      @default(false) // '准入状态 true 准入 false不准入
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      Int
 }

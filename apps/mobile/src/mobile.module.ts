@@ -13,6 +13,8 @@ import { UserSearchModule } from './user-search/user-search.module';
 import { UserArticleViewModule } from './user-article-view/user-article-view.module';
 import { UserArticleReportModule } from './user-article-report/user-article-report.module';
 import { SysUserDeviceModule } from './sys-user-device/sys-user-device.module';
+import { SysDataDictModule } from './sys-data-dict/sys-data-dict.module';
+import { SysDataDictDataModule } from './sys-data-dict-data/sys-data-dict-data.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { SysUserDeviceModule } from './sys-user-device/sys-user-device.module';
     UserArticleViewModule,
     UserArticleReportModule,
     SysUserDeviceModule,
+    SysDataDictModule,
+    SysDataDictDataModule,
   ],
   controllers: [MobileController],
   providers: [MobileService],

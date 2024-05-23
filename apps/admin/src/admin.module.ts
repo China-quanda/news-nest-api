@@ -5,8 +5,9 @@ import { AuthModule, ConfigModule } from '@app/common'; //CommonModule
 import { OrgModule } from './system/organization/org/org.module';
 import { DeptModule } from './system/organization/dept/dept.module';
 import { PostModule } from './system/organization/post/post.module';
+import { MobileDeviceModule } from './system/permission/mobile-device/mobile-device.module';
 @Module({
-  imports: [AuthModule, ConfigModule, OrgModule, DeptModule, PostModule], //CommonModule
+  imports: [AuthModule, ConfigModule, OrgModule, DeptModule, PostModule, MobileDeviceModule], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],
 })

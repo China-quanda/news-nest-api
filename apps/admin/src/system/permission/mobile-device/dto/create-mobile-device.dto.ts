@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { IsBoolean, IsInt, IsString } from 'class-validator';
-export class CreateSysUserDeviceDto
-  implements Prisma.SysUserDeviceUncheckedCreateInput
+export class CreateMobileDeviceDto
+  implements Prisma.SystemPermissionMobileDeviceUncheckedCreateInput
 {
   @IsString()
   @ApiProperty({ example: 'ios' })

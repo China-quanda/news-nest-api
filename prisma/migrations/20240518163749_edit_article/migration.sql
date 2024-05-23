@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Article" ALTER COLUMN "coverImg" DROP NOT NULL,
-ALTER COLUMN "status" DROP NOT NULL;

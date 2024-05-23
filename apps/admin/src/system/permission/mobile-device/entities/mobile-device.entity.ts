@@ -1,8 +1,11 @@
 import { BaseEntity } from '@app/common/entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { SysUserDevice } from '@prisma/client';
+import { SystemPermissionMobileDevice } from '@prisma/client';
 
-export class SysUserDeviceEntity extends BaseEntity implements SysUserDevice {
+export class MobileDeviceEntity
+  extends BaseEntity
+  implements SystemPermissionMobileDevice
+{
   @ApiProperty({ description: '设备系统' })
   deviceOs: string;
   @ApiProperty({ description: '设备编号' })

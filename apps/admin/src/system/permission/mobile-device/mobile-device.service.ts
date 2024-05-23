@@ -4,25 +4,30 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateSysUserDeviceDto } from './dto/create-sys-user-device.dto';
-import { UpdateSysUserDeviceDto } from './dto/update-sys-user-device.dto';
-import { SysUserDevice } from '@prisma/client';
+import { CreateMobileDeviceDto } from './dto/create-mobile-device.dto';
+import { UpdateMobileDeviceDto } from './dto/update-mobile-device.dto';
 import { PrismaService } from '@app/common';
+import { SystemPermissionMobileDevice } from '@prisma/client';
 import { BaseQueryDto } from '@app/common/dto';
 import { ResultList } from '@app/common/utils/result';
 
 @Injectable()
-export class SysUserDeviceService {
+export class MobileDeviceService {
   constructor(private prisma: PrismaService) {}
-  async create(body: CreateSysUserDeviceDto): Promise<SysUserDevice> {
-    const result = await this.prisma.sysUserDevice.create({
+
+  async create(
+    body: CreateMobileDeviceDto,
+  ): Promise<SystemPermissionMobileDevice> {
+    const result = await this.prisma.systemPermissionMobileDevice.create({
       data: body,
     });
     if (!result) throw new HttpException('创建失败！', HttpStatus.BAD_REQUEST);
     return result;
   }
 
-  async findAll(query?: BaseQueryDto): Promise<ResultList<SysUserDevice[]>> {
+  async findAll(
+    query?: BaseQueryDto,
+  ): Promise<ResultList<SystemPermissionMobileDevice[]>> {
     query = Object.assign(
       {
         ...query,
@@ -34,11 +39,11 @@ export class SysUserDeviceService {
     query.pageNum = Number(query.pageNum);
     query.pageSize = Number(query.pageSize);
     console.log('query', query);
-    const result = await this.prisma.sysUserDevice.findMany({
+    const result = await this.prisma.systemPermissionMobileDevice.findMany({
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.sysUserDevice.count();
+    const total = await this.prisma.systemPermissionMobileDevice.count();
     return {
       list: result,
       pagination: {
@@ -49,8 +54,8 @@ export class SysUserDeviceService {
     };
   }
 
-  async findOne(id: number) {
-    const result = await this.prisma.sysUserDevice.findUnique({
+  async findOne(id: number): Promise<SystemPermissionMobileDevice> {
+    const result = await this.prisma.systemPermissionMobileDevice.findUnique({
       where: { id },
     });
     if (!result) throw new NotFoundException(`Not Found a id:${id}`);
@@ -59,10 +64,10 @@ export class SysUserDeviceService {
 
   async update(
     id: number,
-    body: UpdateSysUserDeviceDto,
-  ): Promise<SysUserDevice> {
+    body: UpdateMobileDeviceDto,
+  ): Promise<SystemPermissionMobileDevice> {
     try {
-      const result = await this.prisma.sysUserDevice.update({
+      const result = await this.prisma.systemPermissionMobileDevice.update({
         where: { id },
         data: body,
       });
@@ -76,9 +81,9 @@ export class SysUserDeviceService {
     }
   }
 
-  async remove(id: number): Promise<SysUserDevice> {
+  async remove(id: number): Promise<SystemPermissionMobileDevice> {
     try {
-      const result = await this.prisma.sysUserDevice.delete({
+      const result = await this.prisma.systemPermissionMobileDevice.delete({
         where: { id },
       });
       if (!result) throw new NotFoundException(`Not Found a id:${id}`);

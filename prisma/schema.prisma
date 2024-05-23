@@ -236,4 +236,22 @@ model SystemOrganizationOrg {
   phone     Int? //联系电话
   email     String? //邮箱
   status    Boolean?  @default(true) //机构状态
+  depts SystemOrganizationDept[]
+}
+
+// 系统管理-组织架构-部门管理 
+// system-organization-dept
+model SystemOrganizationDept {
+  id        Int             @id @default(autoincrement())
+  createdTime DateTime @default(now())
+  updatedTime DateTime @updatedAt
+  parentId  Int?             @default(0) //上级id
+  name      String //部门名称
+  sort      Int?             @default(0) // 排序
+  leader    String? //负责人
+  phone     Int? //联系电话
+  email     String? //邮箱
+  status    Boolean?         @default(true) //状态
+  org       SystemOrganizationOrg @relation(fields: [orgId], references: [id])
+  orgId     Int
 }

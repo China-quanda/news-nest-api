@@ -11,6 +11,7 @@ import { DictDataModule } from './system/dm/dict-data/dict-data.module';
 import { CategoryModule } from './system/dm/category/category.module';
 import { ConfigModule as SystemDmConfigModule } from './system/dm/config/config.module';
 import { RegionModule } from './system/dm/region/region.module';
+import { NoticeModule } from './system/message/notice/notice.module';
 @Module({
   imports: [
     AuthModule,
@@ -24,6 +25,7 @@ import { RegionModule } from './system/dm/region/region.module';
     CategoryModule,
     SystemDmConfigModule,
     RegionModule,
+    NoticeModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],

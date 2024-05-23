@@ -315,3 +315,15 @@ model SystemPermissionMobileDevice {
   user        User?    @relation(fields: [userId], references: [id])
   userId      Int
 }
+
+// 系统管理-消息管理-通知公告 
+// system-message-notice
+model SystemMessageNotice {
+  id          Int      @id @default(autoincrement())
+  createdTime DateTime @default(now())
+  updatedTime DateTime @updatedAt
+  title    String // 公告标题
+  type    Int // 公告类型
+  status      Boolean? @default(true) // '状态 true 正常 false关闭
+  content String // 内容
+}

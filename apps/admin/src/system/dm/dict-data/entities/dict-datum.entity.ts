@@ -1,11 +1,7 @@
 import { BaseEntity } from '@app/common/entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { SysDataDictData } from '@prisma/client';
-
-export class SysDataDictDatumEntity
-  extends BaseEntity
-  implements SysDataDictData
-{
+import { SystemDmDictData } from '@prisma/client';
+export class DictDatumEntity extends BaseEntity implements SystemDmDictData {
   @ApiProperty({ description: '字典标签' })
   label: string;
   @ApiProperty({ description: '字典键值' })

@@ -4,26 +4,25 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateSysDataDictDatumDto } from './dto/create-sys-data-dict-datum.dto';
-import { UpdateSysDataDictDatumDto } from './dto/update-sys-data-dict-datum.dto';
-import { SysDataDictData } from '@prisma/client';
+import { CreateDictDatumDto } from './dto/create-dict-datum.dto';
+import { UpdateDictDatumDto } from './dto/update-dict-datum.dto';
 import { PrismaService } from '@app/common';
+import { SystemDmDictData } from '@prisma/client';
 import { BaseQueryDto } from '@app/common/dto';
 import { ResultList } from '@app/common/utils/result';
 
 @Injectable()
-export class SysDataDictDataService {
+export class DictDataService {
   constructor(private prisma: PrismaService) {}
-
-  async create(body: CreateSysDataDictDatumDto): Promise<SysDataDictData> {
-    const result = await this.prisma.sysDataDictData.create({
+  async create(body: CreateDictDatumDto): Promise<SystemDmDictData> {
+    const result = await this.prisma.systemDmDictData.create({
       data: body,
     });
     if (!result) throw new HttpException('创建失败！', HttpStatus.BAD_REQUEST);
     return result;
   }
 
-  async findAll(query?: BaseQueryDto): Promise<ResultList<SysDataDictData[]>> {
+  async findAll(query?: BaseQueryDto): Promise<ResultList<SystemDmDictData[]>> {
     query = Object.assign(
       {
         ...query,
@@ -35,11 +34,11 @@ export class SysDataDictDataService {
     query.pageNum = Number(query.pageNum);
     query.pageSize = Number(query.pageSize);
     console.log('query', query);
-    const result = await this.prisma.sysDataDictData.findMany({
+    const result = await this.prisma.systemDmDictData.findMany({
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.sysDataDictData.count();
+    const total = await this.prisma.systemDmDictData.count();
     return {
       list: result,
       pagination: {
@@ -50,8 +49,8 @@ export class SysDataDictDataService {
     };
   }
 
-  async findOne(id: number): Promise<SysDataDictData> {
-    const result = await this.prisma.sysDataDictData.findUnique({
+  async findOne(id: number): Promise<SystemDmDictData> {
+    const result = await this.prisma.systemDmDictData.findUnique({
       where: { id },
     });
     if (!result) throw new NotFoundException(`Not Found a id:${id}`);
@@ -60,10 +59,10 @@ export class SysDataDictDataService {
 
   async update(
     id: number,
-    body: UpdateSysDataDictDatumDto,
-  ): Promise<SysDataDictData> {
+    body: UpdateDictDatumDto,
+  ): Promise<SystemDmDictData> {
     try {
-      const result = await this.prisma.sysDataDictData.update({
+      const result = await this.prisma.systemDmDictData.update({
         where: { id },
         data: body,
       });
@@ -77,9 +76,9 @@ export class SysDataDictDataService {
     }
   }
 
-  async remove(id: number): Promise<SysDataDictData> {
+  async remove(id: number): Promise<SystemDmDictData> {
     try {
-      const result = await this.prisma.sysDataDictData.delete({
+      const result = await this.prisma.systemDmDictData.delete({
         where: { id },
       });
       if (!result) throw new NotFoundException(`Not Found a id:${id}`);

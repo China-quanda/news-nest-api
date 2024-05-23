@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { IsBoolean, IsInt, IsString } from 'class-validator';
 
-export class CreateSysDataDictDatumDto
-  implements Prisma.SysDataDictDataUncheckedCreateInput
+export class CreateDictDatumDto
+  implements Prisma.SystemDmDictDataUncheckedCreateInput
 {
   @IsString()
   @ApiProperty({

@@ -181,7 +181,7 @@ model UserArticleReport {
   articleId   Int //被举报的文章id
 }
 
-// 系统管理-字典管理-数据字典
+// 系统管理-数据管理-数据字典
 // system-dm-dict
 model SystemDmDict {
   id          Int               @id @default(autoincrement())
@@ -209,6 +209,21 @@ model SystemDmDictData {
   colorType   String?      @default("default") //颜色类型 success primary default info warning danger
   dict        SystemDmDict? @relation(fields: [dictId], references: [id])
   dictId      Int
+}
+
+// 系统管理-数据管理-数据分类
+// system-dm-category
+model SystemDmCategory {
+  id          Int               @id @default(autoincrement())
+  createdTime DateTime          @default(now())
+  updatedTime DateTime          @updatedAt
+  parentId      Int?     @default(0) // 父id
+  name        String //分类名称
+  code        String? //分类编码
+  level       Int?   @default(1) // 层级
+  sort        Int?         @default(0) //顺序
+  status      Boolean?          @default(true) //状态
+  remark      String? //备注
 }
 
 // 系统管理-组织架构-机构管理 

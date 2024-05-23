@@ -8,6 +8,7 @@ import { PostModule } from './system/organization/post/post.module';
 import { MobileDeviceModule } from './system/permission/mobile-device/mobile-device.module';
 import { SystemDmDictModule } from './system/dm/dict/dict.module';
 import { DictDataModule } from './system/dm/dict-data/dict-data.module';
+import { CategoryModule } from './system/dm/category/category.module';
 @Module({
   imports: [
     AuthModule,
@@ -18,6 +19,7 @@ import { DictDataModule } from './system/dm/dict-data/dict-data.module';
     MobileDeviceModule,
     SystemDmDictModule,
     DictDataModule,
+    CategoryModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],

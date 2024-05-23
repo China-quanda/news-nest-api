@@ -9,6 +9,7 @@ import { MobileDeviceModule } from './system/permission/mobile-device/mobile-dev
 import { SystemDmDictModule } from './system/dm/dict/dict.module';
 import { DictDataModule } from './system/dm/dict-data/dict-data.module';
 import { CategoryModule } from './system/dm/category/category.module';
+import { ConfigModule as SystemDmConfigModule } from './system/dm/config/config.module';
 @Module({
   imports: [
     AuthModule,
@@ -20,6 +21,7 @@ import { CategoryModule } from './system/dm/category/category.module';
     SystemDmDictModule,
     DictDataModule,
     CategoryModule,
+    SystemDmConfigModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],

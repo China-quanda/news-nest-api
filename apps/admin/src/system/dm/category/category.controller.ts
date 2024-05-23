@@ -20,7 +20,7 @@ import {
 import { CategoryEntity } from './entities/category.entity';
 
 @ApiTags('系统管理/数据管理')
-@Controller('category')
+@Controller('system/dm/category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

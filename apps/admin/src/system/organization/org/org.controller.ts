@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { OrgEntity } from './entities/org.entity';
 
-@ApiTags('system')
+@ApiTags('系统管理/组织架构')
 @Controller('system/organization/org')
 export class OrgController {
   constructor(private readonly orgService: OrgService) {}

@@ -17,6 +17,6 @@ export class DeptEntity extends BaseEntity implements SystemOrganizationDept {
   email: string;
   @ApiProperty({ description: '机构状态', required: false, default: true })
   status: boolean;
-  @ApiProperty({ description: '机构id', required: true })
+  @ApiProperty({ description: '机构id' })
   orgId: number;
 }

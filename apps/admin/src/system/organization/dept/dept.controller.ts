@@ -19,8 +19,8 @@ import {
 } from '@nestjs/swagger';
 import { DeptEntity } from './entities/dept.entity';
 
-@ApiTags('system')
-@Controller('dept')
+@ApiTags('系统管理/组织架构')
+@Controller('system/organization/dept')
 export class DeptController {
   constructor(private readonly deptService: DeptService) {}
 

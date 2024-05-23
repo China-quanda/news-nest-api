@@ -188,23 +188,6 @@ model QrCode {
   status    Int      @default(1) //状态 1:未确认 2:已扫码 3:确认授权 4:取消授权 5:已过期 
 }
 
-// 岗位表
-model OrganizationPost {
-  id        Int              @id @default(autoincrement())
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  name      String //部门名称
-  code      String? //岗位编码
-  sort      Int              @default(0) // 排序
-  remark    String? //备注
-  status    Boolean          @default(true) //状态
-  scope     Int              @default(0) //权限范围
-  menuIds   Int[]? //菜单权限
-  org       OrganizationOrg  @relation(fields: [orgId], references: [id])
-  orgId     Int
-  dept      OrganizationDept @relation(fields: [deptId], references: [id])
-  deptId    Int
-}
 
 // 通知公告
 model SystemMessageNotice {

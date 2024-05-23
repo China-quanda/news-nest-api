@@ -19,7 +19,7 @@ import {
 import { MobileDeviceEntity } from './entities/mobile-device.entity';
 
 @ApiTags('系统管理/权限管理')
-@Controller('mobile-device')
+@Controller('system/permission/mobileDevice')
 export class MobileDeviceController {
   constructor(private readonly mobileDeviceService: MobileDeviceService) {}
 

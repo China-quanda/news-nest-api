@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SysDataDictService } from './sys-data-dict.service';
+import { SysDataDictService } from './dict.service';
 
 describe('SysDataDictService', () => {
   let service: SysDataDictService;

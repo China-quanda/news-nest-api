@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 
 export class CreateSysDataDictDto
-  implements Prisma.SysDataDictUncheckedCreateInput
+  implements Prisma.SystemDmDictUncheckedCreateInput
 {
   @ApiProperty({ example: '用户性别' })
   name: string;

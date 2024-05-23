@@ -239,6 +239,17 @@ model SystemDmConfig {
   remark      String? //备注
 }
 
+// 系统管理-数据管理-行政区域
+// system-dm-region
+model SystemDmRegion {
+  id          Int               @id @default(autoincrement())
+  createdTime DateTime          @default(now())
+  updatedTime DateTime          @updatedAt
+  parentId    Int                      //上级行政区域id
+  name        String //行政区域名称
+  sort Int //显示排序
+}
+
 // 系统管理-组织架构-机构管理 
 // system-organization-org
 model SystemOrganizationOrg {

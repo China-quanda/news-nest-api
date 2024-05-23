@@ -10,6 +10,7 @@ import { SystemDmDictModule } from './system/dm/dict/dict.module';
 import { DictDataModule } from './system/dm/dict-data/dict-data.module';
 import { CategoryModule } from './system/dm/category/category.module';
 import { ConfigModule as SystemDmConfigModule } from './system/dm/config/config.module';
+import { RegionModule } from './system/dm/region/region.module';
 @Module({
   imports: [
     AuthModule,
@@ -22,6 +23,7 @@ import { ConfigModule as SystemDmConfigModule } from './system/dm/config/config.
     DictDataModule,
     CategoryModule,
     SystemDmConfigModule,
+    RegionModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],

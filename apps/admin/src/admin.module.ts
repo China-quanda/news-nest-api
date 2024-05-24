@@ -12,6 +12,7 @@ import { CategoryModule } from './system/dm/category/category.module';
 import { ConfigModule as SystemDmConfigModule } from './system/dm/config/config.module';
 import { RegionModule } from './system/dm/region/region.module';
 import { NoticeModule } from './system/message/notice/notice.module';
+import { PushModule } from './system/message/push/push.module';
 @Module({
   imports: [
     AuthModule,
@@ -26,6 +27,7 @@ import { NoticeModule } from './system/message/notice/notice.module';
     SystemDmConfigModule,
     RegionModule,
     NoticeModule,
+    PushModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],

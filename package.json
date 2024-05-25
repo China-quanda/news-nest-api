@@ -6,6 +6,12 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "postgres:rm": "docker compose rm postgres -s -f -v",
+    "postgres:up": "docker compose up postgres -d && sleep 5",
+    "db:restart": "npm run db:rm && npm run db:up && npm run db:deploy",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:seed": "ts-node ./prisma/seed.ts",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "NODE_ENV=production nest start",

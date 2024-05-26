@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import { Config } from './config.interface';
+export * from './config.interface';
 
 export const defineConfig = (config: Config): Config => config;
 

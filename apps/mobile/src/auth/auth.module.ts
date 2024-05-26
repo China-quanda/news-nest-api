@@ -4,10 +4,10 @@ import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, PrismaService } from '@app/common';
-import appConfig from '@app/common/config';
+import { SecurityConfig } from '@app/common/config';
 import { JwtStrategy } from './jwt.strategy';
 import { UserModule } from '../user/user.module';
-const { jwt } = appConfig();
+import { ConfigService } from '@nestjs/config';
 @Module({
   controllers: [AuthController],
   providers: [AuthService, PrismaService, JwtStrategy],
@@ -15,10 +15,18 @@ const { jwt } = appConfig();
     UserModule,
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      global: true,
-      secret: jwt.secret,
-      signOptions: jwt.signOptions,
+    JwtModule.registerAsync({
+      useFactory: async (configService: ConfigService) => {
+        const securityConfig = configService.get<SecurityConfig>('security');
+        return {
+          global: true,
+          secret: securityConfig.secret,
+          signOptions: {
+            expiresIn: securityConfig.expiresIn,
+          },
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
 })

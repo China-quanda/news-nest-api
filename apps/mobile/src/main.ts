@@ -6,22 +6,20 @@ import {
   HttpExceptionFilter,
   PrismaClientKnownRequestErrorFilter,
 } from '@app/common/filter';
-import appConfig from '@app/common/config';
-const { jwt } = appConfig();
+import { CorsConfig, NestConfig, SwaggerConfig } from '@app/common/config';
 import { ConfigService } from '@nestjs/config';
 // import { join } from 'node:path';
 
 async function bootstrap() {
-  console.log(jwt.secret);
-
   const app = await NestFactory.create<NestExpressApplication>(MobileModule, {
     logger: ['error', 'warn'],
   });
 
   const configService = app.get(ConfigService);
-  console.log(configService.get('jwt.secret'));
-
-  app.setGlobalPrefix('/api');
+  const nestConfig = configService.get<NestConfig>('nest');
+  const swaggerConfig = configService.get<SwaggerConfig>('swagger');
+  const corsConfig = configService.get<CorsConfig>('swagger');
+  app.setGlobalPrefix(nestConfig.mobile.prefix);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
 
@@ -30,24 +28,33 @@ async function bootstrap() {
     new HttpExceptionFilter(),
   );
 
-  app.useStaticAssets('public', { prefix: '/public' });
+  app.useStaticAssets(nestConfig.static, { prefix: nestConfig.static });
   // app.setBaseViewsDir(join(__dirname, '../', 'views'));
 
-  app.setBaseViewsDir('views');
+  app.setBaseViewsDir(nestConfig.views);
 
-  app.setViewEngine('ejs');
+  app.setViewEngine(nestConfig.template);
 
-  const config = new DocumentBuilder()
-    .setTitle('移动端api文档')
-    .setDescription('这是移动端的api文档')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+  if (swaggerConfig.mobile.enabled) {
+    const config = new DocumentBuilder()
+      .setTitle(swaggerConfig.mobile.title)
+      .setDescription(swaggerConfig.mobile.description)
+      .setVersion(swaggerConfig.mobile.version)
+      .addBearerAuth()
+      .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('document', app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup(swaggerConfig.mobile.path, app, document);
+  }
 
-  await app.listen(3002);
-  console.log('http://localhost:3002/document');
+  if (corsConfig.enabled) {
+    app.enableCors();
+  }
+
+  await app.listen(nestConfig.mobile.port);
+
+  console.log(
+    `http://127.0.0.1:${nestConfig.mobile.port}/${swaggerConfig.mobile.enabled ? swaggerConfig.mobile.path : ''}`,
+  );
 }
 bootstrap();

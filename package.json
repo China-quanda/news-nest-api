@@ -12,6 +12,18 @@
     "email": "877880098@qq.com",
     "url": "https://github.com/China-quanda"
   },
+  "repository": "https://github.com/unlight/nestjs-graphql-prisma.git",
+  "bugs": {
+    "url": "https://github.com/unlight/nestjs-graphql-prisma/issues"
+  },
+  "homepage": "https://github.com/unlight/nestjs-graphql-prisma#readme",
+  "keywords": [
+    "nestjs",
+    "graphql",
+    "prisma",
+    "prisma-generator",
+    "nestjs-graphql"
+  ],
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

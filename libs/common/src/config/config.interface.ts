@@ -17,11 +17,16 @@ export interface JwtConfig {
 }
 
 export interface NestConfig {
+  static: string;
+  views: string;
+  template: string;
   admin: {
     port: number;
+    prefix: string;
   };
   mobile: {
     port: number;
+    prefix: string;
   };
 }
 
@@ -30,16 +35,27 @@ export interface CorsConfig {
 }
 
 export interface SwaggerConfig {
-  enabled: boolean;
-  title: string;
-  description: string;
-  version: string;
-  path: string;
+  admin: {
+    enabled: boolean;
+    title: string;
+    description: string;
+    version: string;
+    path: string;
+  };
+  mobile: {
+    enabled: boolean;
+    title: string;
+    description: string;
+    version: string;
+    path: string;
+  };
 }
 
 export interface SecurityConfig {
+  secret: string;
   expiresIn: string;
   refreshIn: string;
+  refreshSecret: string;
   bcryptSaltOrRound: string | number;
 }
 

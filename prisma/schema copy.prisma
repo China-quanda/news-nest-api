@@ -77,17 +77,6 @@ model Menu {
   sort          Int      @default(0) // 排序
 }
 
-// 日志
-model Log {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int? // 用户ID
-  action    String // 行为
-  ip        String? //ip
-  ipAddr    String? // ip地址
-  params    String? //参数
-}
 
 // 文章
 model Article {
@@ -112,7 +101,6 @@ model Article {
   articleCommentId  Int?
 }
 
-
 // 用户文章收藏表
 model UserArticleCollect {
   id        Int      @id @default(autoincrement())
@@ -124,7 +112,6 @@ model UserArticleCollect {
   articleId Int
 }
 
-
 // 文章评论点赞表
 model ArticleCommentLike {
   id        Int            @id @default(autoincrement())
@@ -135,8 +122,6 @@ model ArticleCommentLike {
   comment   ArticleComment @relation(fields: [commentId], references: [id])
   commentId Int
 }
-
-
 
 
 // 用户授权表
@@ -189,50 +174,6 @@ model QrCode {
 }
 
 
-// 通知公告
-model SystemMessageNotice {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  parentId   Int      @default(0) //上级id
-  title      String //通知公告标题
-  content    String //通知公告内容
-  type       Int      @default(1) //通知公告类型 1通知 2公告
-  sort       Int      @default(0) // 排序
-  status     Boolean  @default(true) //状态
-  sendUser   User     @relation(fields: [sendUserId], references: [id])
-  sendUserId Int //发送人id
-}
-
-// 消息推送
-model SystemMessageNotice {
-  id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  title         String //推送标题
-  content       String //推送内容
-  type          Int       @default(1) //推送类型
-  channel       Int       @default(1) //推送渠道
-  status        Boolean   @default(true) //状态
-  readTime      DateTime? //阅读时间
-  sendUser      User      @relation(fields: [sendUserId], references: [id])
-  sendUserId    Int //发送人id
-  receiveUser   User      @relation(fields: [receiveUserId], references: [id])
-  receiveUserId Int //接收人id
-}
-
-// 系统参数管理
-model SystemDataConfig {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String //参数名称
-  key       String //参数键名
-  value     String //参数值
-  remark    String //备注
-  type      Int      @default(1) //类型 1系统内置
-  status    Boolean  @default(true) //状态
-}
 
 
 // 系统Oss
@@ -258,4 +199,19 @@ model SystemDataOss {
   qcloudSecretId  String? //腾讯云SecretId 类型 腾讯云才有
   qcloudSecretKey String? //腾讯云SecretKey 类型 腾讯云才有
   region          String? //所属地区 类型 腾讯云才有
+}
+
+// 
+// 系统管理-日志管理-操作日志 
+// system-log-operlog
+
+model SystemLogOperLog {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int? // 用户ID
+  action    String // 行为
+  ip        String? //ip
+  ipAddr    String? // ip地址
+  params    String? //参数
 }

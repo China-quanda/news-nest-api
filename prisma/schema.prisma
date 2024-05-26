@@ -4,6 +4,14 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// Prisma 模型命名规则 https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#naming-conventions
+// 1. 命名需要符合以下正则表达式：[A-Za-z][A-Za-z0-9_]*
+// 2. 以字母开头，遵循帕斯卡命名法（Pascal Case）
+// 3. 模型命名用单数而不是复数，例如 User，而不是 users
+// 4. 避开保留字，https://github.com/prisma/prisma/blob/main/packages/client/src/generation/generateClient.ts#L376
+// 5. 自定义表名使用@@map，通常为蛇形命名（snake_case）
+
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -81,6 +89,8 @@ model Article {
   collectCount   Int                  @default(0) // 收藏数
   readCount      Int                  @default(0) // 阅读数
   status         Int?                 @default(1) // 状态(0:草稿;1:审核中;2:审核通过;3审核失败;4:回收站)
+  // type           Int?                 @default(1) // 文章类型 1原创 2转载   为原创的时候应该可以设置打赏
+  // type           Int?                 @default(1) // 发布形式 1全部可见 2仅我可见 3粉丝可见
   author         User?                @relation(fields: [authorId], references: [id])
   authorId       Int?
   category       ArticleCategory?     @relation(fields: [categoryId], references: [id])

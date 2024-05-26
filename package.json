@@ -2,7 +2,16 @@
   "name": "nest-apps",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "packageManager": "pnpm@8.11.0",
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=8"
+  },
+  "author": {
+    "name": "你的Maya",
+    "email": "877880098@qq.com",
+    "url": "https://github.com/China-quanda"
+  },
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

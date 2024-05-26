@@ -6,12 +6,20 @@ import {
   HttpExceptionFilter,
   PrismaClientKnownRequestErrorFilter,
 } from '@app/common/filter';
+import appConfig from '@app/common/config';
+const { jwt } = appConfig();
+import { ConfigService } from '@nestjs/config';
 // import { join } from 'node:path';
 
 async function bootstrap() {
+  console.log(jwt.secret);
+
   const app = await NestFactory.create<NestExpressApplication>(MobileModule, {
     logger: ['error', 'warn'],
   });
+
+  const configService = app.get(ConfigService);
+  console.log(configService.get('jwt.secret'));
 
   app.setGlobalPrefix('/api');
 

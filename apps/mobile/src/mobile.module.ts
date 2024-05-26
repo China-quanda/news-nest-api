@@ -12,8 +12,6 @@ import { UserArticleLikeModule } from './user-article-like/user-article-like.mod
 import { UserSearchModule } from './user-search/user-search.module';
 import { UserArticleViewModule } from './user-article-view/user-article-view.module';
 import { UserArticleReportModule } from './user-article-report/user-article-report.module';
-import { SysDataDictModule } from './sys-data-dict/sys-data-dict.module';
-import { SysDataDictDataModule } from './sys-data-dict-data/sys-data-dict-data.module';
 
 @Module({
   imports: [
@@ -28,8 +26,6 @@ import { SysDataDictDataModule } from './sys-data-dict-data/sys-data-dict-data.m
     UserSearchModule,
     UserArticleViewModule,
     UserArticleReportModule,
-    SysDataDictModule,
-    SysDataDictDataModule,
   ],
   controllers: [MobileController],
   providers: [MobileService],

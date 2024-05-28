@@ -4,6 +4,7 @@ import { MobileModule } from './mobile.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
+import { mw } from 'request-ip';
 import {
   HttpExceptionFilter,
   PrismaClientKnownRequestErrorFilter,
@@ -24,6 +25,9 @@ async function bootstrap() {
       max: 1000, // limit each IP to 100 requests per windowMs
     }),
   );
+
+  // 获取客户端真实IP
+  app.use(mw());
 
   // 漏洞保护
   app.use(helmet());

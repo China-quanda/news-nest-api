@@ -38,16 +38,19 @@ async function bootstrap() {
 
   const { httpAdapter } = app.get(HttpAdapterHost);
 
+  // 配置过滤器
   app.useGlobalFilters(
     new PrismaClientKnownRequestErrorFilter(httpAdapter),
     new HttpExceptionFilter(),
   );
-
+  //配置静态资源目录
   app.useStaticAssets(nestConfig.static, { prefix: nestConfig.static });
   // app.setBaseViewsDir(join(__dirname, '../', 'views'));
 
+  // 配置mvc
   app.setBaseViewsDir(nestConfig.views);
 
+  // 配置模版引擎
   app.setViewEngine(nestConfig.template);
 
   // swagger文档

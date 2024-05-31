@@ -4,6 +4,7 @@ version: '3.8'
 services:
 
   # Docker connection string: postgres://postgres:postgres@localhost:5432/
+  # docker-compose up redis  # 启动redis
 
   postgres:
     image: postgres:13.5
@@ -16,46 +17,39 @@ services:
       - postgres:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-  
-
-  # 启动连接不上
   redis:
-    image: redis:6.2.7
-    container_name: nest_redis
+    image: redis
+    container_name: news_redis
     restart: always
     ports:
-      - "6321:6379"
+      - 6379:6379
     volumes:
-      # - ./config:/opt/config
-      # - ./data:/data
+      - ./docker/redis/data:/data
+      - ./docker/redis/conf/redis.conf:/home/redis/redis.conf
+    command: redis-server /home/redis/redis.conf
+    #  volumes:
+    # - ./config:/opt/config
+    # - ./data:/data
     # command: redis-server /opt/config/redis.conf
-
   mongodb:
     image: mongo:latest
     container_name: nest_mongodb
     restart: always
     ports:
       - "27017:27017"
-    #volumes:
+      #volumes:
       #- ./data/mongo/data:/data/db
       #- ./data/mongo/logs:/var/log/mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root123
-  
-  # 这个启动不了
-  mongo:
-    image: mongo:5 # 选择mongodb版本
-    # restart: always  # 自启动
-    ports:
-     - 27017:27017 # 映射宿主机端口
-    volumes:
-     - /docker/mongodb/data/db:/data/db    # 挂载数据文件，根据实际路径修改 ：前的路径
-     - /docker/mongodb/data/log:/var/log/mongodb  # 挂载日志文件，根据实际路径修改 ：前的路径
-     - /docker/mongodb/data/config:/etc/mongo  # 挂载配置文件，根据实际路径修改 ：前的路径
-    command: --config /docker/mongodb/mongod.conf # 配置文件
-
-  mysql: # 服务名称
+    # volumes:
+    #   - /docker/mongodb/data/db:/data/db # 挂载数据文件，根据实际路径修改 ：前的路径
+    #   - /docker/mongodb/data/log:/var/log/mongodb # 挂载日志文件，根据实际路径修改 ：前的路径
+    #   - /docker/mongodb/data/config:/etc/mongo # 挂载配置文件，根据实际路径修改 ：前的路径
+    # command: --config /docker/mongodb/mongod.conf # 配置文件
+  mysql:
+    # 服务名称
     image: mysql:latest # 或其它mysql版本
     container_name: nest_mysql # 容器名称
     restart: always # 容器随docker启动自启
@@ -68,6 +62,5 @@ services:
       - /etc/localtime:/etc/localtime:ro # 让容器的时钟与宿主机时钟同步，避免时间的问题，ro是read only的意思，就是只读。
     ports:
       - 3306:3306 # 指定宿主机端口与容器端口映射关系，宿主机:容器
-
 volumes:
   postgres:

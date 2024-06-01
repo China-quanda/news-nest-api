@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Min } from 'class-validator';
+import { IsArray, IsInt, IsNotEmpty, IsOptional, Min } from 'class-validator';
 export class BaseQueryDto {
   @Min(1)
   @IsInt()
@@ -15,4 +15,15 @@ export class BaseQueryDto {
   @IsOptional()
   @ApiProperty({ description: '每页条数', default: 10 })
   pageSize?: number;
+}
+
+export class DeleteIdsDto {
+  @IsNotEmpty()
+  @IsArray()
+  @ApiProperty({
+    description: '删除列表',
+    required: true,
+    example: [1, 2, 3, 4, 5],
+  })
+  ids: number[];
 }

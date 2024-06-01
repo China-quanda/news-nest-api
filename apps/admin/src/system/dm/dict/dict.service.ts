@@ -7,9 +7,9 @@ import {
 import { CreateSysDataDictDto } from './dto/create-dict.dto';
 import { UpdateSysDataDictDto } from './dto/update-dict.dto';
 import { PrismaService } from '@app/common';
-import { SystemDmDict } from '@prisma/client';
-import { BaseQueryDto } from '@app/common/dto';
+import { Prisma, SystemDmDict } from '@prisma/client';
 import { ResultList } from '@app/common/utils/result';
+import { QueryDataDictDto } from './dto/query-dict.dto';
 
 @Injectable()
 export class SystemDmDictService {
@@ -23,7 +23,7 @@ export class SystemDmDictService {
     return result;
   }
 
-  async findAll(query?: BaseQueryDto): Promise<ResultList<SystemDmDict[]>> {
+  async findAll(query?: QueryDataDictDto): Promise<ResultList<SystemDmDict[]>> {
     query = Object.assign(
       {
         ...query,
@@ -36,10 +36,52 @@ export class SystemDmDictService {
     query.pageSize = Number(query.pageSize);
     console.log('query', query);
     const result = await this.prisma.systemDmDict.findMany({
+      where: {
+        AND: [
+          {
+            name: {
+              contains: query.name,
+            },
+          },
+          {
+            status: {
+              equals: query.status,
+            },
+          },
+          {
+            type: {
+              contains: query.type,
+            },
+          },
+        ],
+      },
+      orderBy: {
+        createdTime: 'desc',
+      },
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.systemDmDict.count();
+    const total = await this.prisma.systemDmDict.count({
+      where: {
+        AND: [
+          {
+            name: {
+              contains: query.name,
+            },
+          },
+          {
+            status: {
+              equals: query.status,
+            },
+          },
+          {
+            type: {
+              contains: query.type,
+            },
+          },
+        ],
+      },
+    });
     return {
       list: result,
       pagination: {
@@ -88,5 +130,19 @@ export class SystemDmDictService {
       }
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+    if (!ids.length) {
+      throw new HttpException(`ids不能为空`, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.prisma.systemDmDict.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return result;
   }
 }

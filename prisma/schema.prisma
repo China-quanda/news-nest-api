@@ -199,7 +199,7 @@ model SystemDmDict {
   createdTime DateTime           @default(now())
   updatedTime DateTime           @updatedAt
   name        String //字典名称
-  type        String //字典类型
+  type        String             @unique //字典类型
   remark      String? //备注
   status      Boolean?           @default(true) //状态
   dictDatas   SystemDmDictData[]

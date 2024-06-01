@@ -7,9 +7,9 @@ import {
 import { CreateDictDatumDto } from './dto/create-dict-datum.dto';
 import { UpdateDictDatumDto } from './dto/update-dict-datum.dto';
 import { PrismaService } from '@app/common';
-import { SystemDmDictData } from '@prisma/client';
-import { BaseQueryDto } from '@app/common/dto';
+import { Prisma, SystemDmDictData } from '@prisma/client';
 import { ResultList } from '@app/common/utils/result';
+import { QueryDictDataDto } from './dto/query-dict-dayum.dto';
 
 @Injectable()
 export class DictDataService {
@@ -22,7 +22,9 @@ export class DictDataService {
     return result;
   }
 
-  async findAll(query?: BaseQueryDto): Promise<ResultList<SystemDmDictData[]>> {
+  async findAll(
+    query?: QueryDictDataDto,
+  ): Promise<ResultList<SystemDmDictData[]>> {
     query = Object.assign(
       {
         ...query,
@@ -33,12 +35,34 @@ export class DictDataService {
     );
     query.pageNum = Number(query.pageNum);
     query.pageSize = Number(query.pageSize);
-    console.log('query', query);
+    const where = {
+      dict: {
+        id: query.dictId,
+      },
+      AND: [
+        {
+          label: {
+            contains: query.label,
+          },
+        },
+        {
+          status: {
+            equals: query.status,
+          },
+        },
+      ],
+    };
     const result = await this.prisma.systemDmDictData.findMany({
+      where,
+      orderBy: {
+        sort: 'desc',
+      },
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.systemDmDictData.count();
+    const total = await this.prisma.systemDmDictData.count({
+      where,
+    });
     return {
       list: result,
       pagination: {
@@ -90,5 +114,18 @@ export class DictDataService {
       }
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+  async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+    if (!ids.length) {
+      throw new HttpException(`ids不能为空`, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.prisma.systemDmDictData.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return result;
   }
 }

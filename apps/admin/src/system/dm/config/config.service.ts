@@ -6,16 +6,17 @@ import {
 } from '@nestjs/common';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
-import { SystemDmConfig } from '@prisma/client';
+import { Prisma, SystemDmConfig } from '@prisma/client';
 import { PrismaService } from '@app/common';
-import { BaseQueryDto } from '@app/common/dto';
 import { ResultList } from '@app/common/utils/result';
+import { QueryConfigDto } from './dto/query-config.dto';
 
 @Injectable()
 export class ConfigService {
   constructor(private prisma: PrismaService) {}
 
   async create(body: CreateConfigDto): Promise<SystemDmConfig> {
+    console.log('body', body);
     const result = await this.prisma.systemDmConfig.create({
       data: body,
     });
@@ -23,7 +24,7 @@ export class ConfigService {
     return result;
   }
 
-  async findAll(query?: BaseQueryDto): Promise<ResultList<SystemDmConfig[]>> {
+  async findAll(query?: QueryConfigDto): Promise<ResultList<SystemDmConfig[]>> {
     query = Object.assign(
       {
         ...query,
@@ -32,14 +33,42 @@ export class ConfigService {
       },
       query,
     );
-    query.pageNum = Number(query.pageNum);
-    query.pageSize = Number(query.pageSize);
-    console.log('query', query);
+    const where = {
+      AND: [
+        {
+          name: {
+            contains: query.name,
+          },
+        },
+        {
+          key: {
+            contains: query.key,
+          },
+        },
+        {
+          type: {
+            equals: query.type,
+          },
+        },
+        {
+          createdTime: {},
+        },
+      ],
+    };
+    if (query.startTime && query.endTime) {
+      where.AND[3].createdTime = {
+        gte: new Date(query.startTime),
+        lte: new Date(query.endTime),
+      };
+    }
     const result = await this.prisma.systemDmConfig.findMany({
+      where,
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.systemDmConfig.count();
+    const total = await this.prisma.systemDmConfig.count({
+      where,
+    });
     return {
       list: result,
       pagination: {
@@ -88,5 +117,19 @@ export class ConfigService {
       }
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+    if (!ids.length) {
+      throw new HttpException(`ids不能为空`, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.prisma.systemDmConfig.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return result;
   }
 }

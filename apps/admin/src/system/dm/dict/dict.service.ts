@@ -32,9 +32,6 @@ export class SystemDmDictService {
       },
       query,
     );
-    query.pageNum = Number(query.pageNum);
-    query.pageSize = Number(query.pageSize);
-    console.log('query', query);
     const result = await this.prisma.systemDmDict.findMany({
       where: {
         AND: [

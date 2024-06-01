@@ -33,8 +33,6 @@ export class DictDataService {
       },
       query,
     );
-    query.pageNum = Number(query.pageNum);
-    query.pageSize = Number(query.pageSize);
     const where = {
       dict: {
         id: query.dictId,

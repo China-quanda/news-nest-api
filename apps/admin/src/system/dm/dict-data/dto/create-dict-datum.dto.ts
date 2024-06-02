@@ -60,7 +60,7 @@ export class CreateDictDatumDto
 
   @IsInt()
   @ApiProperty({
-    description: '字段id',
+    description: '字典id',
   })
   dictId: number;
 }

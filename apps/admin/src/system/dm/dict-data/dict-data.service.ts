@@ -35,7 +35,7 @@ export class DictDataService {
     );
     const where = {
       dict: {
-        id: query.dictId,
+        type: query.dictType,
       },
       AND: [
         {

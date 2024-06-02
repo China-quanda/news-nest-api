@@ -7,9 +7,9 @@ import {
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from '@app/common';
-import { SystemDmCategory } from '@prisma/client';
-import { BaseQueryDto } from '@app/common/dto';
+import { Prisma, SystemDmCategory } from '@prisma/client';
 import { ResultList } from '@app/common/utils/result';
+import { QueryCategoryDto } from './dto/query-dict-dayum.dto';
 
 @Injectable()
 export class CategoryService {
@@ -22,7 +22,9 @@ export class CategoryService {
     return result;
   }
 
-  async findAll(query?: BaseQueryDto): Promise<ResultList<SystemDmCategory[]>> {
+  async findAll(
+    query?: QueryCategoryDto,
+  ): Promise<ResultList<SystemDmCategory[]>> {
     query = Object.assign(
       {
         ...query,
@@ -31,14 +33,34 @@ export class CategoryService {
       },
       query,
     );
-    query.pageNum = Number(query.pageNum);
-    query.pageSize = Number(query.pageSize);
     console.log('query', query);
+    const where = {
+      AND: [
+        {
+          name: {
+            contains: query.name,
+          },
+        },
+        {
+          status: {
+            equals: query.status,
+          },
+        },
+        {
+          code: {
+            contains: query.code,
+          },
+        },
+      ],
+    };
     const result = await this.prisma.systemDmCategory.findMany({
+      where,
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.systemDmCategory.count();
+    const total = await this.prisma.systemDmCategory.count({
+      where,
+    });
     return {
       list: result,
       pagination: {
@@ -87,5 +109,19 @@ export class CategoryService {
       }
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+    if (!ids.length) {
+      throw new HttpException(`ids不能为空`, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.prisma.systemDmCategory.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return result;
   }
 }

@@ -256,9 +256,10 @@ model SystemDmRegion {
   id          Int      @id @default(autoincrement())
   createdTime DateTime @default(now())
   updatedTime DateTime @updatedAt
-  parentId    Int //上级行政区域id
+  parentCode    Int? @default(0)//上级行政区域code
   name        String //行政区域名称
-  sort        Int //显示排序
+  code        Int @unique //行政区域编码
+  sort        Int? @default(0)//显示排序
 }
 
 // 系统管理-组织架构-机构管理 

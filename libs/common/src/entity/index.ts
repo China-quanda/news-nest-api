@@ -4,7 +4,7 @@ export class BaseEntity {
   @ApiProperty({ description: 'id' })
   id: number;
   @ApiProperty({ description: '创建时间' })
-  createdTime: Date;
+  createTime: Date;
   @ApiProperty({ description: '更新时间' })
-  updatedTime: Date;
+  updateTime: Date;
 }

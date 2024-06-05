@@ -7,52 +7,64 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
+  ParseArrayPipe,
 } from '@nestjs/common';
 import { NoticeService } from './notice.service';
 import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
 import {
+  ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { NoticeEntity } from './entities/notice.entity';
+import { BaseController } from '@app/common';
+import { QueryNoticeDto } from './dto/query-notice.dto';
+import { DeleteIdsDto } from '@app/common/dto';
 
 @ApiTags('系统管理/消息管理')
 @Controller('system/message/notice')
-export class NoticeController {
-  constructor(private readonly noticeService: NoticeService) {}
+export class NoticeController extends BaseController {
+  constructor(private readonly noticeService: NoticeService) {
+    super();
+  }
 
   @Post()
   @ApiOperation({ summary: '新增通知公告 ' })
   @ApiCreatedResponse({ type: NoticeEntity })
-  create(@Body() createNoticeDto: CreateNoticeDto) {
-    return this.noticeService.create(createNoticeDto);
+  async create(@Body() createNoticeDto: CreateNoticeDto) {
+    const result = await this.noticeService.create(createNoticeDto);
+    return this.success(result);
   }
 
   @Get()
   @ApiOperation({ summary: '获取通知公告 列表' })
   @ApiOkResponse({ type: NoticeEntity, isArray: true })
-  findAll() {
-    return this.noticeService.findAll();
+  async findAll(@Query() query: QueryNoticeDto) {
+    const result = await this.noticeService.findAll(query);
+    return this.success(result);
   }
 
   @Get(':id')
   @ApiOperation({ summary: '获取通知公告 详情' })
   @ApiOkResponse({ type: NoticeEntity })
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.noticeService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const result = await this.noticeService.findOne(id);
+    return this.success(result);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: '更新通知公告 信息' })
   @ApiOkResponse({ type: NoticeEntity })
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateNoticeDto: UpdateNoticeDto,
   ) {
-    return this.noticeService.update(id, updateNoticeDto);
+    const result = await this.noticeService.update(id, updateNoticeDto);
+    return this.success(result);
   }
 
   @Delete(':id')
@@ -60,5 +72,15 @@ export class NoticeController {
   @ApiOkResponse({ type: NoticeEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.noticeService.remove(id);
+  }
+
+  @Post('deleteMany')
+  @ApiOperation({ summary: '批量删除' })
+  @ApiBody({
+    type: DeleteIdsDto,
+  })
+  async deleteMany(@Body('ids', ParseArrayPipe) ids: number[]) {
+    const result = await this.noticeService.deleteMany(ids);
+    return this.success(result);
   }
 }

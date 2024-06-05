@@ -41,8 +41,8 @@ datasource db {
 
 model User {
   id               Int                            @id @default(autoincrement())
-  createdTime      DateTime                       @default(now())
-  updatedTime      DateTime                       @updatedAt
+  createTime      DateTime                       @default(now())
+  updateTime      DateTime                       @updatedAt
   username         String //用户名
   password         String //密码
   avatar           String? //头像
@@ -64,8 +64,8 @@ model User {
 // 文章类别
 model ArticleCategory {
   id          Int       @id @default(autoincrement())
-  createdTime DateTime  @default(now())
-  updatedTime DateTime  @updatedAt
+  createTime DateTime  @default(now())
+  updateTime DateTime  @updatedAt
   name        String // 类别名称
   keywords    String? //关键词
   description String? //描述
@@ -77,8 +77,8 @@ model ArticleCategory {
 // 文章
 model Article {
   id             Int                  @id @default(autoincrement())
-  createdTime    DateTime             @default(now())
-  updatedTime    DateTime             @updatedAt
+  createTime    DateTime             @default(now())
+  updateTime    DateTime             @updatedAt
   title          String               @db.VarChar(255) // 文章标题
   isTop          Boolean              @default(false) // 置顶 false:否、true:是
   content        String //文章内容
@@ -105,8 +105,8 @@ model Article {
 // 用户文章收藏夹
 model UserArticleFavorite {
   id          Int                  @id @default(autoincrement())
-  createdTime DateTime             @default(now())
-  updatedTime DateTime             @updatedAt
+  createTime DateTime             @default(now())
+  updateTime DateTime             @updatedAt
   name        String
   user        User?                @relation(fields: [userId], references: [id])
   userId      Int
@@ -116,8 +116,8 @@ model UserArticleFavorite {
 // 用户文章收藏表
 model UserArticleCollect {
   id          Int                  @id @default(autoincrement())
-  createdTime DateTime             @default(now())
-  updatedTime DateTime             @updatedAt
+  createTime DateTime             @default(now())
+  updateTime DateTime             @updatedAt
   article     Article?             @relation(fields: [articleId], references: [id])
   articleId   Int
   favorite    UserArticleFavorite? @relation(fields: [favoriteId], references: [id])
@@ -127,8 +127,8 @@ model UserArticleCollect {
 // 用户文章评论表
 model UserArticleComment {
   id            Int      @id @default(autoincrement())
-  createdTime   DateTime @default(now())
-  updatedTime   DateTime @updatedAt
+  createTime   DateTime @default(now())
+  updateTime   DateTime @updatedAt
   parentId      Int?     @default(0) // 父id，父id为0说明评论文章，否则为回复评论
   content       String //评论内容
   isTop         Int?     @default(0) // 置顶 0:否、1:是
@@ -146,8 +146,8 @@ model UserArticleComment {
 // 用户文章点赞表
 model UserArticleLike {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   user        User?    @relation(fields: [userId], references: [id])
   userId      Int
   article     Article? @relation(fields: [articleId], references: [id])
@@ -157,8 +157,8 @@ model UserArticleLike {
 // 用户搜索表
 model UserSearch {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   searchCount Int      @default(1) // 搜索的次数
   keywords    String //搜索关键词
   type        Int // 搜索类型 1 文章 2 用户 3 评论 4 专栏 5 问答
@@ -169,8 +169,8 @@ model UserSearch {
 // 用户文章浏览表
 model UserArticleView {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   viewCount   Int?     @default(1) // 浏览的次数
   user        User?    @relation(fields: [userId], references: [id])
   userId      Int // // 浏览文章的用户id
@@ -181,8 +181,8 @@ model UserArticleView {
 // 文章举报表
 model UserArticleReport {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   type        Int      @default(0) // 举报类型： 0-其他问题，1-标题夸张，2-低俗色情，3-错别字多，4-旧闻重复，5-广告软文，6-内容不实，7-涉嫌违法犯罪，8-侵权
   remark      String //举报描述文字
   status      Int?     @default(1) //审核状态(0:审核失败;1:审核中;2:审核完成,内容未违规,3:审核完成,内容违规已删除该文章)
@@ -196,8 +196,8 @@ model UserArticleReport {
 // system-dm-dict
 model SystemDmDict {
   id          Int                @id @default(autoincrement())
-  createdTime DateTime           @default(now())
-  updatedTime DateTime           @updatedAt
+  createTime DateTime           @default(now())
+  updateTime DateTime           @updatedAt
   name        String //字典名称
   type        String             @unique //字典类型
   remark      String? //备注
@@ -209,8 +209,8 @@ model SystemDmDict {
 // system-dm-odictData
 model SystemDmDictData {
   id          Int           @id @default(autoincrement())
-  createdTime DateTime      @default(now())
-  updatedTime DateTime      @updatedAt
+  createTime DateTime      @default(now())
+  updateTime DateTime      @updatedAt
   label       String //数据标签
   value       String //数据键值
   class       String? //样式属性Class
@@ -226,8 +226,8 @@ model SystemDmDictData {
 // system-dm-category
 model SystemDmCategory {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   parentId    Int?     @default(0) // 父id
   name        String //分类名称
   code        String? //分类编码
@@ -241,8 +241,8 @@ model SystemDmCategory {
 // system-dm-config
 model SystemDmConfig {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   name        String //参数名称
   key         String //参数键名
   value       String //参数键值
@@ -254,8 +254,8 @@ model SystemDmConfig {
 // system-dm-region
 model SystemDmRegion {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   parentCode    Int? @default(0)//上级行政区域code
   name        String //行政区域名称
   code        Int @unique //行政区域编码
@@ -266,8 +266,8 @@ model SystemDmRegion {
 // system-organization-org
 model SystemOrganizationOrg {
   id          Int                      @id @default(autoincrement())
-  createdTime DateTime                 @default(now())
-  updatedTime DateTime                 @updatedAt
+  createTime DateTime                 @default(now())
+  updateTime DateTime                 @updatedAt
   parentId    Int?                     @default(0) //上级id
   name        String //机构名称
   sort        Int?                     @default(0) // 排序
@@ -283,8 +283,8 @@ model SystemOrganizationOrg {
 // system-organization-dept
 model SystemOrganizationDept {
   id          Int                      @id @default(autoincrement())
-  createdTime DateTime                 @default(now())
-  updatedTime DateTime                 @updatedAt
+  createTime DateTime                 @default(now())
+  updateTime DateTime                 @updatedAt
   parentId    Int?                     @default(0) //上级id
   name        String //部门名称
   sort        Int?                     @default(0) // 排序
@@ -301,8 +301,8 @@ model SystemOrganizationDept {
 // system-organization-post
 model SystemOrganizationPost {
   id          Int                     @id @default(autoincrement())
-  createdTime DateTime                @default(now())
-  updatedTime DateTime                @updatedAt
+  createTime DateTime                @default(now())
+  updateTime DateTime                @updatedAt
   name        String //部门名称
   code        String //岗位编码
   sort        Int?                    @default(0) // 排序
@@ -318,8 +318,8 @@ model SystemOrganizationPost {
 // system-permission-mobileDevice
 model SystemPermissionMobileDevice {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   deviceOs    String // 设备系统
   deviceNo    String // 设备编号
   deviceBrand String // 设备品牌
@@ -332,8 +332,8 @@ model SystemPermissionMobileDevice {
 // system-message-notice
 model SystemMessageNotice {
   id          Int      @id @default(autoincrement())
-  createdTime DateTime @default(now())
-  updatedTime DateTime @updatedAt
+  createTime DateTime @default(now())
+  updateTime DateTime @updatedAt
   title       String // 公告标题
   type        Int // 公告类型
   status      Boolean? @default(true) // '状态 true 正常 false关闭
@@ -344,8 +344,8 @@ model SystemMessageNotice {
 // system-message-push
 model SystemMessagePush {
   id           Int       @id @default(autoincrement())
-  createdTime  DateTime  @default(now())
-  updatedTime  DateTime  @updatedAt
+  createTime  DateTime  @default(now())
+  updateTime  DateTime  @updatedAt
   title        String // 推送标题
   content      String // 推送内容
   pushType     Int //推送类型 流程审批 通知公告， 等等

@@ -7,9 +7,9 @@ import {
 import { CreateMobileDeviceDto } from './dto/create-mobile-device.dto';
 import { UpdateMobileDeviceDto } from './dto/update-mobile-device.dto';
 import { PrismaService } from '@app/common';
-import { SystemPermissionMobileDevice } from '@prisma/client';
-import { BaseQueryDto } from '@app/common/dto';
+import { Prisma, SystemPermissionMobileDevice } from '@prisma/client';
 import { ResultList } from '@app/common/utils/result';
+import { QueryMobileDeviceDto } from './dto/query-mobile-device.dto';
 
 @Injectable()
 export class MobileDeviceService {
@@ -26,7 +26,7 @@ export class MobileDeviceService {
   }
 
   async findAll(
-    query?: BaseQueryDto,
+    query?: QueryMobileDeviceDto,
   ): Promise<ResultList<SystemPermissionMobileDevice[]>> {
     query = Object.assign(
       {
@@ -36,14 +36,41 @@ export class MobileDeviceService {
       },
       query,
     );
-    query.pageNum = Number(query.pageNum);
-    query.pageSize = Number(query.pageSize);
-    console.log('query', query);
+    const where = {
+      AND: [],
+    };
+    if (query.username) {
+      where.AND.push({
+        user: {
+          username: {
+            contains: query.username,
+          },
+          // depId: query.depId,
+        },
+      } as any);
+    }
+    if (query.deviceNo) {
+      where.AND.push({
+        deviceNo: {
+          contains: query.deviceNo,
+        },
+      } as any);
+    }
+    if (query.status !== undefined) {
+      where.AND.push({
+        status: {
+          equals: query.status,
+        },
+      } as any);
+    }
     const result = await this.prisma.systemPermissionMobileDevice.findMany({
+      where,
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.systemPermissionMobileDevice.count();
+    const total = await this.prisma.systemPermissionMobileDevice.count({
+      where,
+    });
     return {
       list: result,
       pagination: {
@@ -95,5 +122,19 @@ export class MobileDeviceService {
       }
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+    if (!ids.length) {
+      throw new HttpException(`ids不能为空`, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.prisma.systemPermissionMobileDevice.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return result;
   }
 }

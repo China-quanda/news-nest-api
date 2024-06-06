@@ -53,7 +53,7 @@ export class SystemDmDictService {
         ],
       },
       orderBy: {
-        createdTime: 'desc',
+        createTime: 'desc',
       },
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,

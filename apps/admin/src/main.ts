@@ -7,6 +7,7 @@ import {
   PrismaClientKnownRequestErrorFilter,
 } from '@app/common/filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { LoggingInterceptor } from '@app/common/Interceptor';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AdminModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
@@ -18,6 +19,8 @@ async function bootstrap() {
     new PrismaClientKnownRequestErrorFilter(httpAdapter),
     new HttpExceptionFilter(),
   );
+
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.useStaticAssets('public', { prefix: '/public' });
 

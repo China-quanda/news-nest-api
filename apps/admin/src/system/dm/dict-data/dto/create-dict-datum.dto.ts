@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { IsBoolean, IsInt, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateDictDatumDto
   implements Prisma.SystemDmDictDataUncheckedCreateInput
 {
+  @IsNotEmpty()
   @IsString()
   @ApiProperty({
     description: '数据标签',
@@ -12,6 +13,7 @@ export class CreateDictDatumDto
   })
   label: string;
 
+  @IsNotEmpty()
   @IsString()
   @ApiProperty({
     description: '数据键值',
@@ -58,6 +60,7 @@ export class CreateDictDatumDto
   })
   colorType?: string;
 
+  @IsNotEmpty()
   @IsInt()
   @ApiProperty({
     description: '字典id',

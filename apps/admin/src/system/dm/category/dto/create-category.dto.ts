@@ -4,6 +4,7 @@ import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsInt,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -21,6 +22,7 @@ export class CreateCategoryDto
   parentId?: number;
 
   @Type(() => String)
+  @IsNotEmpty()
   @IsString()
   @ApiProperty({
     description: '分类名称',

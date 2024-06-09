@@ -1,14 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateSysDataDictDto
   implements Prisma.SystemDmDictUncheckedCreateInput
 {
+  @IsNotEmpty()
   @ApiProperty({ example: '用户性别' })
   @IsString()
   name: string;
 
+  @IsNotEmpty()
   @ApiProperty({ example: 'sys_user_sex' })
   @IsString()
   type: string;

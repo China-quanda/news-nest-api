@@ -1,10 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateDeptDto
   implements Prisma.SystemOrganizationDeptUncheckedCreateInput
 {
   @ApiProperty({ description: '上级部门', required: false, default: 0 })
   parentId?: number;
+
+  @IsString()
+  @Type(() => String)
+  @IsNotEmpty()
   @ApiProperty({ description: '部门名称', example: '郴州总经办' })
   name: string;
   @ApiProperty({ description: '显示排序', required: false, default: 0 })

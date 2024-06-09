@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateRegionDto
   implements Prisma.SystemDmRegionUncheckedCreateInput
 {
+  @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
   @ApiProperty({
@@ -21,6 +22,7 @@ export class CreateRegionDto
   @ApiProperty({ description: '上级行政区域code', default: 0, required: false })
   parentCode?: number;
 
+  @IsNotEmpty()
   @IsString()
   @Type(() => String)
   @ApiProperty({ description: '行政区域名称', example: '北京', required: true })

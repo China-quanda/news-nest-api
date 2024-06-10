@@ -75,6 +75,7 @@ export interface RedisConfig {
   host: string;
   port: number;
   password: string;
+  db: number;
 }
 
 export type PrismaConfig = Prisma.PrismaClientOptions;

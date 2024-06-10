@@ -10,7 +10,7 @@
 // 3. 模型命名用单数而不是复数，例如 User，而不是 users
 // 4. 避开保留字，https://github.com/prisma/prisma/blob/main/packages/client/src/generation/generateClient.ts#L376
 // 5. 自定义表名使用@@map，通常为蛇形命名（snake_case）
-
+// npx prisma migrate dev --name "edit"      
 
 generator client {
   provider = "prisma-client-js"
@@ -59,6 +59,8 @@ model User {
   articleReports   UserArticleReport[]
   devices          SystemPermissionMobileDevice[]
   pushUsers        SystemMessagePush[]
+
+  @@map("news_user")
 }
 
 // 文章类别
@@ -72,6 +74,8 @@ model ArticleCategory {
   sort        Int       @default(0) // 排序
   status      Boolean   @default(true) // 是否启用 1 启用 0 禁用
   articles    Article[]
+
+  @@map("news_article_category")
 }
 
 // 文章
@@ -100,6 +104,8 @@ model Article {
   articleLikes   UserArticleLike[]
   articleViews   UserArticleView[]
   articleReports UserArticleReport[]
+
+  @@map("news_article")
 }
 
 // 用户文章收藏夹
@@ -111,6 +117,8 @@ model UserArticleFavorite {
   user        User?                @relation(fields: [userId], references: [id])
   userId      Int
   collects    UserArticleCollect[]
+
+  @@map("news_user_article_favorite")
 }
 
 // 用户文章收藏表
@@ -122,6 +130,8 @@ model UserArticleCollect {
   articleId   Int
   favorite    UserArticleFavorite? @relation(fields: [favoriteId], references: [id])
   favoriteId  Int
+
+  @@map("news_user_article_collect")
 }
 
 // 用户文章评论表
@@ -141,6 +151,8 @@ model UserArticleComment {
   commentUserId Int //评论用户id
   replyUser     User?    @relation("replyUser", fields: [replyUserId], references: [id])
   replyUserId   Int //被回复的用户id
+
+   @@map("news_user_article_comment")
 }
 
 // 用户文章点赞表
@@ -152,6 +164,8 @@ model UserArticleLike {
   userId      Int
   article     Article? @relation(fields: [articleId], references: [id])
   articleId   Int
+
+   @@map("news_user_article_like")
 }
 
 // 用户搜索表
@@ -164,6 +178,8 @@ model UserSearch {
   type        Int // 搜索类型 1 文章 2 用户 3 评论 4 专栏 5 问答
   user        User?    @relation(fields: [userId], references: [id])
   userId      Int // 搜索的用户id
+
+   @@map("news_user_search")
 }
 
 // 用户文章浏览表
@@ -176,6 +192,8 @@ model UserArticleView {
   userId      Int // // 浏览文章的用户id
   article     Article? @relation(fields: [articleId], references: [id])
   articleId   Int //被浏览的文章id
+
+   @@map("news_user_article_view")
 }
 
 // 文章举报表
@@ -190,6 +208,8 @@ model UserArticleReport {
   userId      Int // 举报的用户id
   article     Article? @relation(fields: [articleId], references: [id])
   articleId   Int //被举报的文章id
+
+   @@map("news_user_article_report")
 }
 
 // 系统管理-数据管理-数据字典
@@ -203,6 +223,8 @@ model SystemDmDict {
   remark      String? //备注
   status      Boolean?           @default(true) //状态
   dictDatas   SystemDmDictData[]
+
+   @@map("news_system_dm_dict")
 }
 
 // 系统管理-数据管理-字典数据
@@ -220,6 +242,8 @@ model SystemDmDictData {
   colorType   String?       @default("default") //颜色类型 success primary default info warning danger
   dict        SystemDmDict? @relation(fields: [dictId], references: [id])
   dictId      Int
+
+  @@map("news_system_dm_dict_data")
 }
 
 // 系统管理-数据管理-数据分类
@@ -235,6 +259,8 @@ model SystemDmCategory {
   sort        Int?     @default(0) //顺序
   status      Boolean? @default(true) //状态
   remark      String? //备注
+
+  @@map("news_system_dm_category")
 }
 
 // 系统管理-数据管理-参数管理
@@ -248,6 +274,8 @@ model SystemDmConfig {
   value       String //参数键值
   type        Boolean? @default(false) //系统内置
   remark      String? //备注
+
+  @@map("news_system_dm_config")
 }
 
 // 系统管理-数据管理-行政区域
@@ -260,6 +288,8 @@ model SystemDmRegion {
   name        String //行政区域名称
   code        Int @unique //行政区域编码
   sort        Int? @default(0)//显示排序
+
+  @@map("news_system_dm_region")
 }
 
 // 系统管理-组织架构-机构管理 
@@ -277,6 +307,8 @@ model SystemOrganizationOrg {
   status      Boolean?                 @default(true) //机构状态
   depts       SystemOrganizationDept[]
   posts       SystemOrganizationPost[]
+
+  @@map("news_system_organization_org")
 }
 
 // 系统管理-组织架构-部门管理 
@@ -295,6 +327,8 @@ model SystemOrganizationDept {
   org         SystemOrganizationOrg    @relation(fields: [orgId], references: [id])
   orgId       Int
   posts       SystemOrganizationPost[]
+
+  @@map("news_system_organization_dept")
 }
 
 // 系统管理-组织架构-岗位管理 
@@ -312,6 +346,8 @@ model SystemOrganizationPost {
   orgId       Int
   dept        SystemOrganizationDept? @relation(fields: [deptId], references: [id])
   deptId      Int
+
+  @@map("news_system_organization_post")
 }
 
 // 系统管理-权限管理-设备管理 
@@ -326,6 +362,8 @@ model SystemPermissionMobileDevice {
   status      Boolean? @default(false) // '准入状态 true 准入 false不准入
   user        User?    @relation(fields: [userId], references: [id])
   userId      Int
+
+   @@map("news_system_permission_mobile_device")
 }
 
 // 系统管理-消息管理-通知公告 
@@ -338,6 +376,8 @@ model SystemMessageNotice {
   type        Int // 公告类型
   status      Boolean? @default(true) // '状态 true 正常 false关闭
   content     String // 内容
+
+  @@map("news_system_message_notice")
 }
 
 // 系统管理-消息管理-消息推送 
@@ -358,4 +398,6 @@ model SystemMessagePush {
   appNotifyUrl String? // app通知地址
   readNum      Int?      @default(0) // 阅读次数
   readTime     DateTime? //阅读时间
+
+  @@map("news_system_message_push")
 }

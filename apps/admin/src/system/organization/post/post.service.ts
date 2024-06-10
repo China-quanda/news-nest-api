@@ -7,9 +7,9 @@ import {
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '@app/common';
-import { SystemOrganizationPost } from '@prisma/client';
-import { BaseQueryDto } from '@app/common/dto';
+import { Prisma, SystemOrganizationPost } from '@prisma/client';
 import { ResultList } from '@app/common/utils/result';
+import { QueryPostDto } from './dto/query-post.dto';
 
 @Injectable()
 export class PostService {
@@ -24,7 +24,7 @@ export class PostService {
   }
 
   async findAll(
-    query?: BaseQueryDto,
+    query?: QueryPostDto,
   ): Promise<ResultList<SystemOrganizationPost[]>> {
     query = Object.assign(
       {
@@ -37,11 +37,38 @@ export class PostService {
     query.pageNum = Number(query.pageNum);
     query.pageSize = Number(query.pageSize);
     console.log('query', query);
+    const where = {
+      AND: [
+        {
+          org: {},
+        },
+        {
+          dept: {},
+        },
+        {
+          name: {
+            contains: query.name,
+          },
+        },
+        {
+          status: {
+            equals: query.status,
+          },
+        },
+      ],
+    };
+    if (query.orgId) {
+      where.AND[0].org = { id: query.orgId };
+    }
+    if (query.deptId) {
+      where.AND[1].dept = { id: query.deptId };
+    }
     const result = await this.prisma.systemOrganizationPost.findMany({
+      where,
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.systemOrganizationPost.count();
+    const total = await this.prisma.systemOrganizationPost.count({ where });
     return {
       list: result,
       pagination: {
@@ -93,5 +120,19 @@ export class PostService {
       }
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+    if (!ids.length) {
+      throw new HttpException(`ids不能为空`, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.prisma.systemOrganizationPost.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return result;
   }
 }

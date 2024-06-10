@@ -68,5 +68,6 @@ export class CreateDeptDto
   @ApiProperty({ description: '机构id' })
   @IsNumber()
   @Type(() => Number)
+  @IsNotEmpty()
   orgId: number;
 }

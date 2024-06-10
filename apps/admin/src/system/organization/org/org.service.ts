@@ -7,9 +7,9 @@ import {
 import { CreateOrgDto } from './dto/create-org.dto';
 import { UpdateOrgDto } from './dto/update-org.dto';
 import { PrismaService } from '@app/common';
-import { SystemOrganizationOrg } from '@prisma/client';
-import { BaseQueryDto } from '@app/common/dto';
+import { Prisma, SystemOrganizationOrg } from '@prisma/client';
 import { ResultList } from '@app/common/utils/result';
+import { QueryOrgDto } from './dto/query-org.dto';
 
 @Injectable()
 export class OrgService {
@@ -24,7 +24,7 @@ export class OrgService {
   }
 
   async findAll(
-    query?: BaseQueryDto,
+    query?: QueryOrgDto,
   ): Promise<ResultList<SystemOrganizationOrg[]>> {
     query = Object.assign(
       {
@@ -37,11 +37,26 @@ export class OrgService {
     query.pageNum = Number(query.pageNum);
     query.pageSize = Number(query.pageSize);
     console.log('query', query);
+    const where = {
+      AND: [
+        {
+          name: {
+            contains: query.name,
+          },
+        },
+        {
+          status: {
+            equals: query.status,
+          },
+        },
+      ],
+    };
     const result = await this.prisma.systemOrganizationOrg.findMany({
+      where,
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.systemOrganizationOrg.count();
+    const total = await this.prisma.systemOrganizationOrg.count({ where });
     return {
       list: result,
       pagination: {
@@ -90,5 +105,19 @@ export class OrgService {
       }
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+    if (!ids.length) {
+      throw new HttpException(`ids不能为空`, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.prisma.systemOrganizationOrg.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return result;
   }
 }

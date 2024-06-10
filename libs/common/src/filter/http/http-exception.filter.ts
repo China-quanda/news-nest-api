@@ -1,3 +1,4 @@
+// import { Result } from '@app/common/utils/result';
 import {
   ArgumentsHost,
   Catch,
@@ -13,11 +14,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    response.status(status).json({
-      code: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      describe: exception.message,
-    });
+    if (status === 400) {
+      const e: any = exception.getResponse();
+      response.status(status).json({
+        code: status,
+        message: e.message[0] || exception.message,
+        data: null,
+      });
+    } else {
+      response.status(status).json({
+        code: status,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+        describe: exception.message,
+      });
+    }
   }
 }

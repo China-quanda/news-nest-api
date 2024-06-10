@@ -10,7 +10,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { LoggingInterceptor } from '@app/common/Interceptor';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AdminModule);
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.setGlobalPrefix('/api/admin');
 
   const { httpAdapter } = app.get(HttpAdapterHost);

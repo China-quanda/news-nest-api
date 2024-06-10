@@ -1,3 +1,5 @@
+import { HttpService } from '@nestjs/axios';
+import iconv from 'iconv-lite';
 // reduce 是将树结构数据转化为扁平化数据的另一种常见方法。reduce 方法在遍历整个树结构时，将每个节点的值和它的父节点的值（如果有的话）存储在一个对象中，然后将这个对象添加到结果数组中。
 export function flattenTree(tree) {
   return tree.reduce((result, node) => {
@@ -71,3 +73,35 @@ export function handleTree<T>(
   }
   return tree;
 }
+
+// 没开发好
+// console.log('getIpAddress', await getIpAddress('36.158.112.194'));
+export const getIpAddress = async (ip: string) => {
+  const http = new HttpService();
+  try {
+    const response: any = await http.get(
+      `https://whois.pconline.com.cn/ipJson.jsp?ip=${ip}&json=true`,
+      {
+        responseType: 'arraybuffer',
+        transformResponse: [
+          function (data) {
+            const str = iconv.decode(data, 'gbk');
+            console.log('data', data, 'str', str);
+            return JSON.parse(str);
+          },
+        ],
+      },
+    );
+
+    const res: any = await http.get(
+      `https://whois.pconline.com.cn/ipJson.jsp?ip=${ip}&json=true`,
+    );
+    console.log('res1', res);
+    console.log('res2', iconv.decode(res.data, 'gbk'));
+
+    console.log(response);
+    return response;
+  } catch (e) {
+    return 'error';
+  }
+};

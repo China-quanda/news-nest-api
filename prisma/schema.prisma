@@ -59,6 +59,7 @@ model User {
   articleReports   UserArticleReport[]
   devices          SystemPermissionMobileDevice[]
   pushUsers        SystemMessagePush[]
+  loginLogs        SystemLogLoginLog[]
 
   @@map("news_user")
 }
@@ -400,4 +401,22 @@ model SystemMessagePush {
   readTime     DateTime? @map("read_time") //阅读时间
 
   @@map("news_system_message_push")
+}
+
+// 系统管理-日志管理-登录日志
+// system-log-loginLog
+model SystemLogLoginLog {
+  id          Int      @id @default(autoincrement())
+  loginTime   DateTime? @default(now()) @map("login_time") // 登录时间
+  loginIp     String   @map("login_ip") //登录ip地址
+  loginCity   String   @map("login_city") //登录城市地点
+  browser     String //浏览器
+  os          String //操作系统
+  loginType   Int      @map("login_type") // '登录类型1账户密码登录 2扫码登录 3QQ登录 4微信登录 ',
+  loginSource Int      @map("login_source") // '登录来源（0其它 1后台用户 2App用户 3小程序用户 4wap用户 5web端用户）',
+  message     String //登录信息（登录成功）（登录失败）（退出成功）
+  status      Int?     @default(1) //登录状态
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      Int //登录用户id
+  @@map("news_system_log_login_log")
 }

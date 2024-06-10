@@ -13,6 +13,7 @@ import { ConfigModule as SystemDmConfigModule } from './system/dm/config/config.
 import { RegionModule } from './system/dm/region/region.module';
 import { NoticeModule } from './system/message/notice/notice.module';
 import { PushModule } from './system/message/push/push.module';
+import { LoginLogModule } from './system/log/login-log/login-log.module';
 @Module({
   imports: [
     AuthModule,
@@ -28,6 +29,7 @@ import { PushModule } from './system/message/push/push.module';
     RegionModule,
     NoticeModule,
     PushModule,
+    LoginLogModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],

@@ -1,7 +1,11 @@
+import { BaseEntity } from '@app/common/entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { ArticleCategory } from '@prisma/client';
 
-export class ArticleCategoryEntity implements ArticleCategory {
+export class ArticleCategoryEntity
+  extends BaseEntity
+  implements ArticleCategory
+{
   @ApiProperty({ description: 'id' })
   id: number;
   @ApiProperty({ description: '创建时间' })

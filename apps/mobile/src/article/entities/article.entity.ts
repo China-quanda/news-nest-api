@@ -2,8 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Article } from '@prisma/client';
 import { UserEntity } from '../../user/entities/user.entity';
 import { ArticleCategoryEntity } from '../../article-category/entities/article-category.entity';
+import { BaseEntity } from '@app/common/entity';
 
-export class ArticleEntity implements Article {
+export class ArticleEntity extends BaseEntity implements Article {
   @ApiProperty({ description: 'id' })
   id: number;
   @ApiProperty({ description: '创建时间' })

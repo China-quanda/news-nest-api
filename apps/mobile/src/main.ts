@@ -28,10 +28,13 @@ async function bootstrap() {
 
   // 获取客户端真实IP
   app.use(mw());
+  // app.use(mw({ attributeName: 'ip' }));
 
   // 漏洞保护
   app.use(helmet());
-
+  // web 安全，防常见漏洞
+  // 注意： 开发环境如果开启 nest static module 需要将 crossOriginResourcePolicy 设置为 false 否则 静态资源 跨域不可访问
+  // app.use(helmet({ crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' }, crossOriginResourcePolicy: false }));
   const configService = app.get(ConfigService);
   const nestConfig = configService.get<NestConfig>('nest');
   const swaggerConfig = configService.get<SwaggerConfig>('swagger');

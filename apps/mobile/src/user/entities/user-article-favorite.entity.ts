@@ -1,7 +1,11 @@
+import { BaseEntity } from '@app/common/entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserArticleFavorite } from '@prisma/client';
 
-export class UserArticleFavoriteEntity implements UserArticleFavorite {
+export class UserArticleFavoriteEntity
+  extends BaseEntity
+  implements UserArticleFavorite
+{
   @ApiProperty({ description: 'id' })
   id: number;
   @ApiProperty({ description: '创建时间' })

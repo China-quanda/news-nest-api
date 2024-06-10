@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
+  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -32,6 +33,9 @@ export class CreateOrgDto
   sort?: number;
 
   @ApiProperty({ description: '负责人', required: false, example: '李世民' })
+  @IsOptional()
+  @IsString()
+  @Type(() => String)
   leader?: string;
 
   @ApiProperty({
@@ -52,6 +56,7 @@ export class CreateOrgDto
     example: '12345@qq.com',
   })
   @Type(() => String)
+  @IsEmail({}, { message: '请输入正确的邮箱' })
   @IsString()
   @IsOptional()
   email?: string;

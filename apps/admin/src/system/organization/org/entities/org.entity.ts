@@ -12,7 +12,7 @@ export class OrgEntity extends BaseEntity implements SystemOrganizationOrg {
   @ApiProperty({ description: '负责人', required: false })
   leader: string;
   @ApiProperty({ description: '联系电话', required: false })
-  phone: number;
+  phone: string;
   @ApiProperty({ description: '负责人邮箱', required: false })
   email: string;
   @ApiProperty({ description: '机构状态', required: false, default: true })

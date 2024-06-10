@@ -7,9 +7,9 @@ import {
 import { CreateDeptDto } from './dto/create-dept.dto';
 import { UpdateDeptDto } from './dto/update-dept.dto';
 import { PrismaService } from '@app/common';
-import { BaseQueryDto } from '@app/common/dto';
 import { ResultList } from '@app/common/utils/result';
-import { SystemOrganizationDept } from '@prisma/client';
+import { Prisma, SystemOrganizationDept } from '@prisma/client';
+import { QueryDeptDto } from './dto/query-dept.dto';
 
 @Injectable()
 export class DeptService {
@@ -24,7 +24,7 @@ export class DeptService {
   }
 
   async findAll(
-    query?: BaseQueryDto,
+    query?: QueryDeptDto,
   ): Promise<ResultList<SystemOrganizationDept[]>> {
     query = Object.assign(
       {
@@ -37,11 +37,32 @@ export class DeptService {
     query.pageNum = Number(query.pageNum);
     query.pageSize = Number(query.pageSize);
     console.log('query', query);
+    const where = {
+      AND: [
+        {
+          org: {},
+        },
+        {
+          name: {
+            contains: query.name,
+          },
+        },
+        {
+          status: {
+            equals: query.status,
+          },
+        },
+      ],
+    };
+    if (query.orgId) {
+      where.AND[0].org = { id: query.orgId };
+    }
     const result = await this.prisma.systemOrganizationDept.findMany({
+      where,
       take: query.pageSize,
       skip: (query.pageNum - 1) * query.pageSize,
     });
-    const total = await this.prisma.systemOrganizationDept.count();
+    const total = await this.prisma.systemOrganizationDept.count({ where });
     return {
       list: result,
       pagination: {
@@ -93,5 +114,19 @@ export class DeptService {
       }
       throw new HttpException('未知异常', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+    if (!ids.length) {
+      throw new HttpException(`ids不能为空`, HttpStatus.BAD_REQUEST);
+    }
+    const result = await this.prisma.systemOrganizationDept.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return result;
   }
 }

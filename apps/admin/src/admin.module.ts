@@ -14,6 +14,7 @@ import { RegionModule } from './system/dm/region/region.module';
 import { NoticeModule } from './system/message/notice/notice.module';
 import { PushModule } from './system/message/push/push.module';
 import { LoginLogModule } from './system/log/login-log/login-log.module';
+import { ServerModule } from './system/monitor/server/server.module';
 @Module({
   imports: [
     AuthModule,
@@ -30,6 +31,7 @@ import { LoginLogModule } from './system/log/login-log/login-log.module';
     NoticeModule,
     PushModule,
     LoginLogModule,
+    ServerModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],

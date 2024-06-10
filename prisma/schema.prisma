@@ -41,8 +41,8 @@ datasource db {
 
 model User {
   id               Int                            @id @default(autoincrement())
-  createTime      DateTime                       @default(now())
-  updateTime      DateTime                       @updatedAt
+  createTime       DateTime                       @default(now()) @map("create_time")
+  updateTime       DateTime                       @updatedAt @map("update_time")
   username         String //用户名
   password         String //密码
   avatar           String? //头像
@@ -66,8 +66,8 @@ model User {
 // 文章类别
 model ArticleCategory {
   id          Int       @id @default(autoincrement())
-  createTime DateTime  @default(now())
-  updateTime DateTime  @updatedAt
+  createTime  DateTime  @default(now()) @map("create_time")
+  updateTime  DateTime  @updatedAt @map("update_time")
   name        String // 类别名称
   keywords    String? //关键词
   description String? //描述
@@ -81,17 +81,17 @@ model ArticleCategory {
 // 文章
 model Article {
   id             Int                  @id @default(autoincrement())
-  createTime    DateTime             @default(now())
-  updateTime    DateTime             @updatedAt
+  createTime     DateTime             @default(now()) @map("create_time")
+  updateTime     DateTime             @updatedAt @map("update_time")
   title          String               @db.VarChar(255) // 文章标题
-  isTop          Boolean              @default(false) // 置顶 false:否、true:是
+  isTop          Boolean              @default(false) @map("is_top") // 置顶 false:否、true:是
   content        String //文章内容
-  coverType      Int                  @default(0) // 封面类型 0-无图，1-1张，3-3张,10:自动
-  coverImg       String? // 封面的URL地址
-  commentCount   Int                  @default(0) // 评论数
-  likeCount      Int                  @default(0) // 点赞数
-  collectCount   Int                  @default(0) // 收藏数
-  readCount      Int                  @default(0) // 阅读数
+  coverType      Int                  @default(0) @map("cover_type") // 封面类型 0-无图，1-1张，3-3张,10:自动 
+  coverImg       String?              @map("cover_img") // 封面的URL地址
+  commentCount   Int                  @default(0) @map("comment_count") // 评论数
+  likeCount      Int                  @default(0) @map("like_count") // 点赞数
+  collectCount   Int                  @default(0) @map("collect_count") // 收藏数
+  readCount      Int                  @default(0) @map("read_count") // 阅读数
   status         Int?                 @default(1) // 状态(0:草稿;1:审核中;2:审核通过;3审核失败;4:回收站)
   // type           Int?                 @default(1) // 文章类型 1原创 2转载   为原创的时候应该可以设置打赏
   // type           Int?                 @default(1) // 发布形式 1全部可见 2仅我可见 3粉丝可见
@@ -110,26 +110,26 @@ model Article {
 
 // 用户文章收藏夹
 model UserArticleFavorite {
-  id          Int                  @id @default(autoincrement())
-  createTime DateTime             @default(now())
-  updateTime DateTime             @updatedAt
-  name        String
-  user        User?                @relation(fields: [userId], references: [id])
-  userId      Int
-  collects    UserArticleCollect[]
+  id         Int                  @id @default(autoincrement())
+  createTime DateTime             @default(now()) @map("create_time")
+  updateTime DateTime             @updatedAt @map("update_time")
+  name       String
+  user       User?                @relation(fields: [userId], references: [id])
+  userId     Int
+  collects   UserArticleCollect[]
 
   @@map("news_user_article_favorite")
 }
 
 // 用户文章收藏表
 model UserArticleCollect {
-  id          Int                  @id @default(autoincrement())
-  createTime DateTime             @default(now())
-  updateTime DateTime             @updatedAt
-  article     Article?             @relation(fields: [articleId], references: [id])
-  articleId   Int
-  favorite    UserArticleFavorite? @relation(fields: [favoriteId], references: [id])
-  favoriteId  Int
+  id         Int                  @id @default(autoincrement())
+  createTime DateTime             @default(now()) @map("create_time")
+  updateTime DateTime             @updatedAt @map("update_time")
+  article    Article?             @relation(fields: [articleId], references: [id])
+  articleId  Int
+  favorite   UserArticleFavorite? @relation(fields: [favoriteId], references: [id])
+  favoriteId Int
 
   @@map("news_user_article_collect")
 }
@@ -137,13 +137,13 @@ model UserArticleCollect {
 // 用户文章评论表
 model UserArticleComment {
   id            Int      @id @default(autoincrement())
-  createTime   DateTime @default(now())
-  updateTime   DateTime @updatedAt
+  createTime    DateTime @default(now()) @map("create_time")
+  updateTime    DateTime @updatedAt @map("update_time")
   parentId      Int?     @default(0) // 父id，父id为0说明评论文章，否则为回复评论
   content       String //评论内容
-  isTop         Int?     @default(0) // 置顶 0:否、1:是
-  commentCount  Int?     @default(0) // 评论数
-  likeCount     Int?     @default(0) // 点赞数
+  isTop         Int?     @default(0) @map("is_top") // 置顶 0:否、1:是
+  commentCount  Int?     @default(0) @map("comment_count") // 评论数
+  likeCount     Int?     @default(0) @map("like_count") // 点赞数
   status        Int?     @default(2) // 是状态(1:审核中;2:审核通过;3审核失败;)
   article       Article? @relation(fields: [articleId], references: [id])
   articleId     Int //被评论的文章
@@ -152,96 +152,96 @@ model UserArticleComment {
   replyUser     User?    @relation("replyUser", fields: [replyUserId], references: [id])
   replyUserId   Int //被回复的用户id
 
-   @@map("news_user_article_comment")
+  @@map("news_user_article_comment")
 }
 
 // 用户文章点赞表
 model UserArticleLike {
-  id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  user        User?    @relation(fields: [userId], references: [id])
-  userId      Int
-  article     Article? @relation(fields: [articleId], references: [id])
-  articleId   Int
+  id         Int      @id @default(autoincrement())
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     Int
+  article    Article? @relation(fields: [articleId], references: [id])
+  articleId  Int
 
-   @@map("news_user_article_like")
+  @@map("news_user_article_like")
 }
 
 // 用户搜索表
 model UserSearch {
   id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  searchCount Int      @default(1) // 搜索的次数
+  createTime  DateTime @default(now()) @map("create_time")
+  updateTime  DateTime @updatedAt @map("update_time")
+  searchCount Int      @default(1) @map("search_count") // 搜索的次数
   keywords    String //搜索关键词
   type        Int // 搜索类型 1 文章 2 用户 3 评论 4 专栏 5 问答
   user        User?    @relation(fields: [userId], references: [id])
   userId      Int // 搜索的用户id
 
-   @@map("news_user_search")
+  @@map("news_user_search")
 }
 
 // 用户文章浏览表
 model UserArticleView {
-  id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  viewCount   Int?     @default(1) // 浏览的次数
-  user        User?    @relation(fields: [userId], references: [id])
-  userId      Int // // 浏览文章的用户id
-  article     Article? @relation(fields: [articleId], references: [id])
-  articleId   Int //被浏览的文章id
+  id         Int      @id @default(autoincrement())
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  viewCount  Int?     @default(1) @map("view_count") // 浏览的次数
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     Int // // 浏览文章的用户id
+  article    Article? @relation(fields: [articleId], references: [id])
+  articleId  Int //被浏览的文章id
 
-   @@map("news_user_article_view")
+  @@map("news_user_article_view")
 }
 
 // 文章举报表
 model UserArticleReport {
-  id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  type        Int      @default(0) // 举报类型： 0-其他问题，1-标题夸张，2-低俗色情，3-错别字多，4-旧闻重复，5-广告软文，6-内容不实，7-涉嫌违法犯罪，8-侵权
-  remark      String //举报描述文字
-  status      Int?     @default(1) //审核状态(0:审核失败;1:审核中;2:审核完成,内容未违规,3:审核完成,内容违规已删除该文章)
-  user        User?    @relation(fields: [userId], references: [id])
-  userId      Int // 举报的用户id
-  article     Article? @relation(fields: [articleId], references: [id])
-  articleId   Int //被举报的文章id
+  id         Int      @id @default(autoincrement())
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  type       Int      @default(0) // 举报类型： 0-其他问题，1-标题夸张，2-低俗色情，3-错别字多，4-旧闻重复，5-广告软文，6-内容不实，7-涉嫌违法犯罪，8-侵权
+  remark     String //举报描述文字
+  status     Int?     @default(1) //审核状态(0:审核失败;1:审核中;2:审核完成,内容未违规,3:审核完成,内容违规已删除该文章)
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     Int // 举报的用户id
+  article    Article? @relation(fields: [articleId], references: [id])
+  articleId  Int //被举报的文章id
 
-   @@map("news_user_article_report")
+  @@map("news_user_article_report")
 }
 
 // 系统管理-数据管理-数据字典
 // system-dm-dict
 model SystemDmDict {
-  id          Int                @id @default(autoincrement())
-  createTime DateTime           @default(now())
-  updateTime DateTime           @updatedAt
-  name        String //字典名称
-  type        String             @unique //字典类型
-  remark      String? //备注
-  status      Boolean?           @default(true) //状态
-  dictDatas   SystemDmDictData[]
+  id         Int                @id @default(autoincrement())
+  createTime DateTime           @default(now()) @map("create_time")
+  updateTime DateTime           @updatedAt @map("update_time")
+  name       String //字典名称
+  type       String             @unique //字典类型
+  remark     String? //备注
+  status     Boolean?           @default(true) //状态
+  dictDatas  SystemDmDictData[]
 
-   @@map("news_system_dm_dict")
+  @@map("news_system_dm_dict")
 }
 
 // 系统管理-数据管理-字典数据
 // system-dm-odictData
 model SystemDmDictData {
-  id          Int           @id @default(autoincrement())
-  createTime DateTime      @default(now())
-  updateTime DateTime      @updatedAt
-  label       String //数据标签
-  value       String //数据键值
-  class       String? //样式属性Class
-  sort        Int?          @default(0) //顺序
-  remark      String? //备注
-  status      Boolean?      @default(true) //状态d
-  colorType   String?       @default("default") //颜色类型 success primary default info warning danger
-  dict        SystemDmDict? @relation(fields: [dictId], references: [id])
-  dictId      Int
+  id         Int           @id @default(autoincrement())
+  createTime DateTime      @default(now()) @map("create_time")
+  updateTime DateTime      @updatedAt @map("update_time")
+  label      String //数据标签
+  value      String //数据键值
+  class      String? //样式属性Class
+  sort       Int?          @default(0) //顺序
+  remark     String? //备注
+  status     Boolean?      @default(true) //状态d
+  colorType  String?       @default("default") @map("color_type") //颜色类型 success primary default info warning danger
+  dict       SystemDmDict? @relation(fields: [dictId], references: [id])
+  dictId     Int
 
   @@map("news_system_dm_dict_data")
 }
@@ -249,16 +249,16 @@ model SystemDmDictData {
 // 系统管理-数据管理-数据分类
 // system-dm-category
 model SystemDmCategory {
-  id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  parentId    Int?     @default(0) // 父id
-  name        String //分类名称
-  code        String? //分类编码
-  level       Int?     @default(1) // 层级
-  sort        Int?     @default(0) //顺序
-  status      Boolean? @default(true) //状态
-  remark      String? //备注
+  id         Int      @id @default(autoincrement())
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  parentId   Int?     @default(0) @map("parent_id") // 父id 
+  name       String //分类名称
+  code       String? //分类编码
+  level      Int?     @default(1) // 层级
+  sort       Int?     @default(0) //顺序
+  status     Boolean? @default(true) //状态
+  remark     String? //备注
 
   @@map("news_system_dm_category")
 }
@@ -266,14 +266,14 @@ model SystemDmCategory {
 // 系统管理-数据管理-参数管理
 // system-dm-config
 model SystemDmConfig {
-  id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  name        String //参数名称
-  key         String //参数键名
-  value       String //参数键值
-  type        Boolean? @default(false) //系统内置
-  remark      String? //备注
+  id         Int      @id @default(autoincrement())
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  name       String //参数名称
+  key        String //参数键名
+  value      String //参数键值
+  type       Boolean? @default(false) //系统内置
+  remark     String? //备注
 
   @@map("news_system_dm_config")
 }
@@ -281,13 +281,13 @@ model SystemDmConfig {
 // 系统管理-数据管理-行政区域
 // system-dm-region
 model SystemDmRegion {
-  id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  parentCode    Int? @default(0)//上级行政区域code
-  name        String //行政区域名称
-  code        Int @unique //行政区域编码
-  sort        Int? @default(0)//显示排序
+  id         Int      @id @default(autoincrement())
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  parentCode Int?     @default(0) @map("parent_code") //上级行政区域code
+  name       String //行政区域名称
+  code       Int      @unique //行政区域编码
+  sort       Int?     @default(0) //显示排序
 
   @@map("news_system_dm_region")
 }
@@ -295,18 +295,18 @@ model SystemDmRegion {
 // 系统管理-组织架构-机构管理 
 // system-organization-org
 model SystemOrganizationOrg {
-  id          Int                      @id @default(autoincrement())
-  createTime DateTime                 @default(now())
-  updateTime DateTime                 @updatedAt
-  parentId    Int?                     @default(0) //上级id
-  name        String //机构名称
-  sort        Int?                     @default(0) // 排序
-  leader      String? //负责人
-  phone       Int? //联系电话
-  email       String? //邮箱
-  status      Boolean?                 @default(true) //机构状态
-  depts       SystemOrganizationDept[]
-  posts       SystemOrganizationPost[]
+  id         Int                      @id @default(autoincrement())
+  createTime DateTime                 @default(now()) @map("create_time")
+  updateTime DateTime                 @updatedAt @map("update_time")
+  parentId   Int?                     @default(0) @map("parent_id") //上级id
+  name       String //机构名称
+  sort       Int?                     @default(0) // 排序
+  leader     String? //负责人
+  phone      Int? //联系电话
+  email      String? //邮箱
+  status     Boolean?                 @default(true) //机构状态
+  depts      SystemOrganizationDept[]
+  posts      SystemOrganizationPost[]
 
   @@map("news_system_organization_org")
 }
@@ -314,19 +314,19 @@ model SystemOrganizationOrg {
 // 系统管理-组织架构-部门管理 
 // system-organization-dept
 model SystemOrganizationDept {
-  id          Int                      @id @default(autoincrement())
-  createTime DateTime                 @default(now())
-  updateTime DateTime                 @updatedAt
-  parentId    Int?                     @default(0) //上级id
-  name        String //部门名称
-  sort        Int?                     @default(0) // 排序
-  leader      String? //负责人
-  phone       Int? //联系电话
-  email       String? //邮箱
-  status      Boolean?                 @default(true) //状态
-  org         SystemOrganizationOrg    @relation(fields: [orgId], references: [id])
-  orgId       Int
-  posts       SystemOrganizationPost[]
+  id         Int                      @id @default(autoincrement())
+  createTime DateTime                 @default(now()) @map("create_time")
+  updateTime DateTime                 @updatedAt @map("update_time")
+  parentId   Int?                     @default(0) @map("parent_id") //上级id
+  name       String //部门名称
+  sort       Int?                     @default(0) // 排序
+  leader     String? //负责人
+  phone      Int? //联系电话
+  email      String? //邮箱
+  status     Boolean?                 @default(true) //状态
+  org        SystemOrganizationOrg    @relation(fields: [orgId], references: [id])
+  orgId      Int
+  posts      SystemOrganizationPost[]
 
   @@map("news_system_organization_dept")
 }
@@ -334,18 +334,18 @@ model SystemOrganizationDept {
 // 系统管理-组织架构-岗位管理 
 // system-organization-post
 model SystemOrganizationPost {
-  id          Int                     @id @default(autoincrement())
-  createTime DateTime                @default(now())
-  updateTime DateTime                @updatedAt
-  name        String //部门名称
-  code        String //岗位编码
-  sort        Int?                    @default(0) // 排序
-  remark      String? //备注
-  status      Boolean?                @default(true) //状态
-  org         SystemOrganizationOrg?  @relation(fields: [orgId], references: [id])
-  orgId       Int
-  dept        SystemOrganizationDept? @relation(fields: [deptId], references: [id])
-  deptId      Int
+  id         Int                     @id @default(autoincrement())
+  createTime DateTime                @default(now()) @map("create_time")
+  updateTime DateTime                @updatedAt @map("update_time")
+  name       String //部门名称
+  code       String //岗位编码
+  sort       Int?                    @default(0) // 排序
+  remark     String? //备注
+  status     Boolean?                @default(true) //状态
+  org        SystemOrganizationOrg?  @relation(fields: [orgId], references: [id])
+  orgId      Int
+  dept       SystemOrganizationDept? @relation(fields: [deptId], references: [id])
+  deptId     Int
 
   @@map("news_system_organization_post")
 }
@@ -354,28 +354,28 @@ model SystemOrganizationPost {
 // system-permission-mobileDevice
 model SystemPermissionMobileDevice {
   id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  deviceOs    String // 设备系统
-  deviceNo    String // 设备编号
-  deviceBrand String // 设备品牌
+  createTime  DateTime @default(now()) @map("create_time")
+  updateTime  DateTime @updatedAt @map("update_time")
+  deviceOs    String   @map("device_os") // 设备系统
+  deviceNo    String   @map("device_no") // 设备编号
+  deviceBrand String   @map("device_brand") // 设备品牌
   status      Boolean? @default(false) // '准入状态 true 准入 false不准入
   user        User?    @relation(fields: [userId], references: [id])
   userId      Int
 
-   @@map("news_system_permission_mobile_device")
+  @@map("news_system_permission_mobile_device")
 }
 
 // 系统管理-消息管理-通知公告 
 // system-message-notice
 model SystemMessageNotice {
-  id          Int      @id @default(autoincrement())
-  createTime DateTime @default(now())
-  updateTime DateTime @updatedAt
-  title       String // 公告标题
-  type        Int // 公告类型
-  status      Boolean? @default(true) // '状态 true 正常 false关闭
-  content     String // 内容
+  id         Int      @id @default(autoincrement())
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  title      String // 公告标题
+  type       Int // 公告类型
+  status     Boolean? @default(true) // '状态 true 正常 false关闭
+  content    String // 内容
 
   @@map("news_system_message_notice")
 }
@@ -384,20 +384,20 @@ model SystemMessageNotice {
 // system-message-push
 model SystemMessagePush {
   id           Int       @id @default(autoincrement())
-  createTime  DateTime  @default(now())
-  updateTime  DateTime  @updatedAt
+  createTime   DateTime  @default(now()) @map("create_time")
+  updateTime   DateTime  @updatedAt @map("update_time")
   title        String // 推送标题
   content      String // 推送内容
-  pushType     Int //推送类型 流程审批 通知公告， 等等
-  receiveUser Int[] // 接收人user ids
+  pushType     Int       @map("push_type") //推送类型 流程审批 通知公告， 等等
+  receiveUser  Int[] // 接收人user ids
   sendUser     User?     @relation(fields: [sendUserId], references: [id]) // 发送人
   sendUserId   Int // 发送人id
-  pushClientId String? // 推送客户端id
-  pushChannel  Int? // 推送渠道 app端 pc端 全端
-  pcNotifyUrl  String? // pc通知地址
-  appNotifyUrl String? // app通知地址
-  readNum      Int?      @default(0) // 阅读次数
-  readTime     DateTime? //阅读时间
+  pushClientId String?   @map("push_client_id") // 推送客户端id
+  pushChannel  Int?      @map("push_channel") // 推送渠道 app端 pc端 全端
+  pcNotifyUrl  String?   @map("pc_notify_url") // pc通知地址
+  appNotifyUrl String?   @map("app_notify_url") // app通知地址
+  readNum      Int?      @default(0) @map("read_num") // 阅读次数
+  readTime     DateTime? @map("read_time") //阅读时间
 
   @@map("news_system_message_push")
 }

@@ -76,7 +76,16 @@ export class UserService {
   async findOneUser(where: Prisma.UserWhereInput): Promise<User> {
     const user = await this.prisma.user.findFirst({ where: where });
     // findUnique({ where: { username } });
-    if (!user) throw new NotFoundException();
+    if (!user) {
+      // 找不到用户 404
+      throw new NotFoundException(
+        `No user found for username: ${where.username}`,
+      );
+
+      // 为了安全 我这边提示 用户账户或密码错误
+
+      // throw new HttpException(`用户账户或密码错误`, HttpStatus.BAD_REQUEST);
+    }
     return user;
   }
 

@@ -15,10 +15,24 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
     if (status === 400) {
-      const e: any = exception.getResponse();
+      // 验证请求报错 应该捕获class-validator
+      // const e: any = exception.getResponse();
+      // console.log(e.message)
+      // response.status(status).json({
+      //   code: status,
+      //   message: e.message[0] || exception.message,
+      //   data: null,
+      // });
+      // 自定义报错
       response.status(status).json({
         code: status,
-        message: e.message[0] || exception.message,
+        message: exception.message,
+        data: null,
+      });
+    } else if (status === 404) {
+      response.status(status).json({
+        code: status,
+        message: exception.message,
         data: null,
       });
     } else {

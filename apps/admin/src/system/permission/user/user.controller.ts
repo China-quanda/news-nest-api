@@ -16,6 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteIdsDto } from '@app/common/dto';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -25,6 +26,7 @@ import {
 import { BaseController } from '@app/common';
 import { UserEntity } from './entities/user.entity';
 import { QueryUserDto } from './dto/query-user.dto';
+// import { JwtAuthGuard } from 'apps/admin/src/auth/jwt-auth.guard';
 
 @ApiTags('系统管理/权限管理/用户管理')
 @Controller('system/permission/user')
@@ -40,8 +42,8 @@ export class UserController extends BaseController {
     const result = await this.userService.create(createUserDto);
     return this.success(result);
   }
-
   // @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: '获取用户列表' })
   @ApiOkResponse({ type: UserEntity, isArray: true })

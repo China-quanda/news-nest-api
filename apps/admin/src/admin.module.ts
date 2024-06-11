@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { AuthModule, ConfigModule } from '@app/common'; //CommonModule
+import { ConfigModule } from '@app/common'; //CommonModule
 import { OrgModule } from './system/organization/org/org.module';
 import { DeptModule } from './system/organization/dept/dept.module';
 import { PostModule } from './system/organization/post/post.module';
@@ -16,6 +16,9 @@ import { PushModule } from './system/message/push/push.module';
 import { LoginLogModule } from './system/log/login-log/login-log.module';
 import { ServerModule } from './system/monitor/server/server.module';
 import { UserModule } from './system/permission/user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 @Module({
   imports: [
     AuthModule,
@@ -36,6 +39,12 @@ import { UserModule } from './system/permission/user/user.module';
     UserModule,
   ], //CommonModule
   controllers: [AdminController],
-  providers: [AdminService],
+  providers: [
+    AdminService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AdminModule {}

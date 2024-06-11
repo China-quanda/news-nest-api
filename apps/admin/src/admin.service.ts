@@ -1,16 +1,11 @@
-import { AuthService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AdminService {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
   async getHello() {
     // console.log('users', users);
     console.log('jwt', this.configService.get('jwt'));
-    console.log('commonService', this.authService.getAuthService());
     // return users;
   }
 

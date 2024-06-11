@@ -1,6 +1,11 @@
+// jwt 校验守卫
 //src/auth/jwt-auth.guard.ts
 import { IS_PUBLIC_KEY } from '@app/common/decorator/public.decorator';
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
@@ -59,5 +64,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     });
     // 在白名单内 则 进行下一步， i === -1 ，则不在白名单，需要 比对是否有当前接口权限
     return i > -1;
+  }
+
+  /* 主动处理错误 */
+  handleRequest(err, user, info) {
+    console.log('JwtStrategy-handleRequest', err, user, info);
+    if (err || !user || !user.userName) {
+      throw err || new UnauthorizedException('登录状态已过期');
+    }
+    // 返回值会被挂载到request的user上
+    return user;
   }
 }

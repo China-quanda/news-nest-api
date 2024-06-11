@@ -4,6 +4,8 @@ export default defineConfig({
     secret: 'topSecret511',
     signOptions: { expiresIn: '5m' }, // e.g. 30s, 7d, 24h
   },
+  // 预览模式
+  isPreview: false,
   nest: {
     static: '/public',
     views: 'views',

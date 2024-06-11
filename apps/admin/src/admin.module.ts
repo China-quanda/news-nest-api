@@ -15,6 +15,7 @@ import { NoticeModule } from './system/message/notice/notice.module';
 import { PushModule } from './system/message/push/push.module';
 import { LoginLogModule } from './system/log/login-log/login-log.module';
 import { ServerModule } from './system/monitor/server/server.module';
+import { UserModule } from './system/permission/user/user.module';
 @Module({
   imports: [
     AuthModule,
@@ -32,6 +33,7 @@ import { ServerModule } from './system/monitor/server/server.module';
     PushModule,
     LoginLogModule,
     ServerModule,
+    UserModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [AdminService],

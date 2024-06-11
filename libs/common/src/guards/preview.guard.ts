@@ -13,7 +13,6 @@ export class PreviewGuard implements CanActivate {
   constructor(private readonly configService: ConfigService) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPreview = this.configService.get<boolean>('isPreview');
-    console.log('isPreview', isPreview);
     if (!isPreview) return true;
     const request: Request = context.switchToHttp().getRequest();
     const allowUrlArr = ['/login', '/logout']; //放过的路由

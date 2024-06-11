@@ -9,7 +9,7 @@ export interface Config {
   prisma?: PrismaConfig;
   database?: DatabaseConfig;
   redis?: RedisConfig;
-  isPreview: boolean;
+  isPreview?: boolean;
 }
 
 export interface JwtConfig {

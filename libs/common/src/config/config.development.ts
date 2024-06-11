@@ -6,6 +6,12 @@ export default defineConfig({
   },
   // 预览模式
   isPreview: false,
+  redis: {
+    host: '127.0.0.1',
+    port: 6379,
+    password: '123456',
+    db: 0,
+  },
   nest: {
     static: '/public',
     views: 'views',

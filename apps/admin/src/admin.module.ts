@@ -20,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { PreviewGuard } from '@app/common/guards/preview.guard';
+import { RedisModule } from '@app/common/redis/redis.module';
 @Module({
   imports: [
     AuthModule,
@@ -38,6 +39,7 @@ import { PreviewGuard } from '@app/common/guards/preview.guard';
     LoginLogModule,
     ServerModule,
     UserModule,
+    RedisModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [

@@ -1,9 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Redis } from 'ioredis';
 @Injectable()
 export class AdminService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
+  ) {}
   async getHello() {
+    this.redisClient.set('name', '刘强东');
+    const value = await this.redisClient.get('name');
+    console.log('aaavalue', value);
+
     // console.log('users', users);
     console.log('jwt', this.configService.get('jwt'));
     // return users;

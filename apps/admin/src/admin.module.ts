@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { ConfigModule } from '@app/common'; //CommonModule
+import { ConfigModule, PrismaModule, RedisModule } from '@app/common'; //CommonModule
 import { OrgModule } from './system/organization/org/org.module';
 import { DeptModule } from './system/organization/dept/dept.module';
 import { PostModule } from './system/organization/post/post.module';
@@ -20,7 +20,6 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { PreviewGuard } from '@app/common/guards/preview.guard';
-import { RedisModule } from '@app/common/redis/redis.module';
 @Module({
   imports: [
     AuthModule,
@@ -40,6 +39,7 @@ import { RedisModule } from '@app/common/redis/redis.module';
     ServerModule,
     UserModule,
     RedisModule,
+    PrismaModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [

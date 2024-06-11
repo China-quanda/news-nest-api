@@ -3,7 +3,6 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, PrismaService } from '@app/common';
 import { SecurityConfig } from '@app/common/config';
 import { UserModule } from '../system/permission/user/user.module';
 import { ConfigService } from '@nestjs/config';
@@ -13,7 +12,6 @@ import { LocalStrategy } from './local.strategy';
 @Module({
   imports: [
     UserModule,
-    ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => {
@@ -30,6 +28,6 @@ import { LocalStrategy } from './local.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService, JwtStrategy, LocalStrategy],
+  providers: [AuthService, JwtStrategy, LocalStrategy],
 })
 export class AuthModule {}

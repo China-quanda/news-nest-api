@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsInt, IsNotEmpty, IsOptional, Min } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  Min,
+} from 'class-validator';
 export class BaseQueryDto {
   @Min(1)
   @IsInt()
@@ -26,4 +33,15 @@ export class DeleteIdsDto {
     example: [1, 2, 3, 4, 5],
   })
   ids: number[];
+}
+
+/**
+ * 时间区间对象
+ */
+export class DateParamsDTO {
+  @IsDateString()
+  beginTime: string;
+
+  @IsDateString()
+  endTime: string;
 }

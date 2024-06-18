@@ -420,3 +420,18 @@ model SystemLogLoginLog {
   userId      Int //登录用户id
   @@map("news_system_log_login_log")
 }
+
+
+// 友情链接
+// link
+model Link {
+  id          Int      @id @default(autoincrement())
+  createTime   DateTime  @default(now()) @map("create_time")
+  updateTime   DateTime  @updatedAt @map("update_time")
+  url     String    //友情链接地址
+  name   String    //友情链接名称
+  email     String //站长EMAIL
+  logo          String //友情链接logo
+  status     Boolean? @default(true) // '状态 true 1显示 false不显示
+  @@map("news_link")
+}

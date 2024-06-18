@@ -20,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { PreviewGuard } from '@app/common/guards/preview.guard';
+import { LinkModule } from './link/link.module';
 @Module({
   imports: [
     AuthModule,
@@ -40,15 +41,16 @@ import { PreviewGuard } from '@app/common/guards/preview.guard';
     UserModule,
     RedisModule,
     PrismaModule,
+    LinkModule,
   ], //CommonModule
   controllers: [AdminController],
   providers: [
     AdminService,
     // jwt守卫
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
     // 是否演示环境守卫
     {
       provide: APP_GUARD,

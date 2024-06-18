@@ -40,6 +40,14 @@ export class DeptController extends BaseController {
     return this.success(result);
   }
 
+  @Get('treedata')
+  @ApiOperation({ summary: '查询部门树结构' })
+  // @ApiOkResponse({ type: DeptEntity })
+  async treedata(@Query() query: any) {
+    const result = await this.deptService.treedata(query);
+    return this.success(result);
+  }
+
   @Get()
   @ApiOperation({ summary: '获取部门列表' })
   @ApiOkResponse({ type: DeptEntity })

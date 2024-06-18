@@ -10,6 +10,7 @@ import { PrismaService } from '@app/common';
 import { ResultList } from '@app/common/utils/result';
 import { Prisma, SystemOrganizationDept } from '@prisma/client';
 import { QueryDeptDto } from './dto/query-dept.dto';
+import { handleTree } from '@app/common/utils';
 
 @Injectable()
 export class DeptService {
@@ -21,6 +22,32 @@ export class DeptService {
     });
     if (!result) throw new HttpException('创建失败！', HttpStatus.BAD_REQUEST);
     return result;
+  }
+
+  // TODO 未完成 参考地址 ：http://119.91.209.77:8088/system/organization/post   treedata这个数据
+  async treedata(query: any) {
+    const result3 = await this.prisma.systemOrganizationOrg.findMany({
+      where: {
+        status: true,
+      },
+      take: 1000,
+      select: {
+        id: true,
+        parentId: true,
+        name: true,
+        depts: {
+          select: {
+            id: true,
+            name: true,
+            parentId: true,
+            orgId: true,
+          },
+        },
+      },
+    });
+    const tree = handleTree(result3, 'id', 'parentId');
+    console.log('result', tree);
+    return result3;
   }
 
   async findAll(

@@ -8,18 +8,18 @@ services:
 
   postgres:
     image: postgres:13.5
-    container_name: nest_postgres
+    container_name: qd_nest_postgres
     restart: always # 容器随docker启动自启
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - ./docker/postgres/data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
   redis:
     image: redis
-    container_name: news_redis
+    container_name: qd_news_redis
     restart: always
     ports:
       - 6379:6379
@@ -33,34 +33,58 @@ services:
     # command: redis-server /opt/config/redis.conf
   mongodb:
     image: mongo:latest
-    container_name: nest_mongodb
-    restart: always
+    container_name: qd_nest_mongodb
     ports:
       - "27017:27017"
-      #volumes:
-      #- ./data/mongo/data:/data/db
-      #- ./data/mongo/logs:/var/log/mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root123
-    # volumes:
-    #   - /docker/mongodb/data/db:/data/db # 挂载数据文件，根据实际路径修改 ：前的路径
-    #   - /docker/mongodb/data/log:/var/log/mongodb # 挂载日志文件，根据实际路径修改 ：前的路径
-    #   - /docker/mongodb/data/config:/etc/mongo # 挂载配置文件，根据实际路径修改 ：前的路径
+    volumes:
+      - ./docker/mongodb/data/db:/data/db # 挂载数据文件，根据实际路径修改 ：前的路径
+      - ./docker/mongodb/data/log:/var/log/mongodb # 挂载日志文件，根据实际路径修改 ：前的路径
+      - ./docker/mongodb/data/config:/etc/mongo # 挂载配置文件，根据实际路径修改 ：前的路径
     # command: --config /docker/mongodb/mongod.conf # 配置文件
   mysql:
     # 服务名称
     image: mysql:latest # 或其它mysql版本
-    container_name: nest_mysql # 容器名称
+    container_name: qd_nest_mysql # 容器名称
     restart: always # 容器随docker启动自启
     environment:
       - MYSQL_ROOT_PASSWORD=123456 # root用户密码
     #  - TZ=Asia/Shanghai # 设置容器时区 我这里通过下面挂载方式同步的宿主机时区和时间了,这里忽略
     volumes:
-      # - /data/mysql:/var/lib/mysql # 映射数据目录，宿主机:容器
+      - ./docker/mysql/data/mysql:/var/lib/mysql # 映射数据目录，宿主机:容器
       # - /etc/my.cnf:/etc/my.cnf # 映射配置目录，宿主机:容器
       - /etc/localtime:/etc/localtime:ro # 让容器的时钟与宿主机时钟同步，避免时间的问题，ro是read only的意思，就是只读。
     ports:
       - 3306:3306 # 指定宿主机端口与容器端口映射关系，宿主机:容器
+  minio:
+    image: minio/minio
+    container_name: qd_nest_minio
+    ports:
+      - 9000:9000
+      - 9011:9011
+    environment:
+      TZ: Asia/Shanghai
+      # MINIO_ROOT_USER: minio
+      # MINIO_ROOT_PASSWORD: minio123
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    volumes:
+      # 宿主机目录 /data/minio  映射到容器内目录/data ，作为minio的数据文件目录 
+      - ./docker/minio/data:/data
+    command: server /data --console-address ":9011"
+  nginx:
+    image: nginx
+    container_name: qd_nest_nginx
+    ports:
+      - 80:80
+      - 444:444
+    volumes:
+      - ./docker/nginx/data/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/certs:/etc/nginx/certs
+      - ./docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/log:/var/log/nginx
+      - ./docker/nginx/html:/usr/share/nginx/html
 volumes:
   postgres:

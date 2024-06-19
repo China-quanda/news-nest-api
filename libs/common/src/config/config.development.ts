@@ -1,5 +1,12 @@
 import { defineConfig } from './index';
 export default defineConfig({
+  minio: {
+    endPoint: 'localhost',
+    port: 9000,
+    useSSL: false,
+    accessKey: 'minio',
+    secretKey: 'minio123',
+  },
   jwt: {
     secret: 'topSecret511',
     signOptions: { expiresIn: '5m' }, // e.g. 30s, 7d, 24h

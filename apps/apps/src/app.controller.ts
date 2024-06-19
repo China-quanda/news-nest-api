@@ -1,12 +1,17 @@
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { MinioService } from '@app/common';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly minioService: MinioService,
+  ) {}
 
   @Get()
-  getHello(): string {
+  async getHello() {
+    console.log('minioService', await this.minioService.getBuckets());
     return this.appService.getHello();
   }
   @HttpCode(200)

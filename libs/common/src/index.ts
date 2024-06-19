@@ -9,6 +9,9 @@ export * from './prisma/prisma.module';
 export * from './redis/redis.service';
 export * from './redis/redis.module';
 
+export * from './minio/minio.module';
+export * from './minio/minio.service';
+
 // export * from './controller';
 // export * from './decorator';
 // export * from './dto';
